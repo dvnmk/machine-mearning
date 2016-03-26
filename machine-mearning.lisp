@@ -162,10 +162,10 @@
 (defparameter *last-druck-point* '(0 0))
 
 (defun conv-mouse-pos ()
-   (let* ((i (nimm-mouse-pos))
-	    (x (- (/ (car i) 2.0)
-		  (/ *fringe-width* 2.0)))
-	    (y (/ (cdr i) 2.0)))
+  (let* ((i (nimm-mouse-pos))
+	 (x (- (/ (car i) 2.0)
+	       (/ *fringe-width* 2.0)))
+	 (y (/ (cdr i) 2.0)))
     (list x y)))
 
 (defun druck ()
@@ -176,8 +176,7 @@
        (setf (car *last-druck-point*) x)
        (setf (cadr *last-druck-point*) y)
        (format t "GEDRUCKT ~d ~d~%" x y)
-       *last-druck-point*
-))
+       *last-druck-point*))
 
 (defun druck-guck ()
   (progn (druck)
@@ -186,4 +185,4 @@
 	 *last-druck-point*
 	 ))
 
-(defparameter *kiste* nil )
+(defparameter *kiste* '())
