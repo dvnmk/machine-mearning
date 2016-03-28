@@ -22,6 +22,7 @@
 (defun 2slime (str)
   (cadr (slime-eval `(swank:eval-and-grab-output ,str))))
 
+
 (defmacro use (fun-name)
   "Use the same name fun from CL"
   `(defun ,fun-name (&optional arg1 arg2)
@@ -43,6 +44,7 @@
 
 (use-i druck-guck)
 (global-set-key (kbd "<H-return>") #'druck-guck)
+(use-i druck)
 
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
@@ -50,7 +52,7 @@
   :lighter " (M)"
   :keymap (let ((map (make-sparse-keymap)))
 
-            ;; (define-key map (kbd "H-s") #'foo)
+            (define-key map (kbd "<down-mouse-1>") #'druck)
             
             ;; (define-key map (kbd "C-a")
             ;;   (lambda()(interactive)

@@ -14,7 +14,7 @@
   (merge-pathnames "shot-resize.png" *working-dir*))
 
 (defparameter *remote-file*
-  "mobile@192.168.0.3:/var/mobile/Media/DCIM/100APPLE/shot.png")
+  "mobile@localhost:/var/mobile/Media/DCIM/100APPLE/shot.png")
 
 ;; (defparameter *shot* (make-pathname
 ;; 		      :directory *working-dir*
@@ -28,7 +28,7 @@
 (defun connect ()
   (progn
     (defparameter *ssh* (ccl:run-program "ssh"
-					'("-t" "-t" "mobile@192.168.0.3")
+					'("-t" "-t" "mobile@localhost" "-p" "2000")
 					:output t :input :stream :wait nil
 					:sharing :external))
     (defparameter *ssh-in* (ccl:external-process-input-stream *ssh*))))
@@ -44,9 +44,12 @@
   (let ((cmd (format nil "stouch swipe ~S ~S ~S ~S ~S" x1 y1 x2 y2 dura)))
     (cmd cmd)))
 
-(defun touch (x y)
-  (let ((cmd (format nil "stouch touch ~S ~S" x y)))
-    (cmd cmd)))
+(defun touch (lst)
+  (let* ((x (car lst))
+	(y (cadr lst))
+	(cmd (format nil "stouch touch ~S ~S" x y)))
+    (cmd cmd)
+    lst))
 
 (defun zzz ()
   "Push the sleep button on iphone"
@@ -93,7 +96,7 @@
 ;; pathname TODO
 (defun shot-down ()
   (ccl:run-program "rsync"
-		   `("-v" "-e ssh" "-L"
+		   `("-v" "-e ssh \'-p 2000\'" "-L"
 		     ;; "--progress"
 		     ,*remote-file*
 		     ,(directory-namestring *working-dir*))
@@ -106,7 +109,7 @@
     (shot-symlink)
     (sleep 0.5)
     (shot-down)
-    (defparameter *shot-image* (opticl:read-png-file *shot-path*))
+    (setf *shot-image* (opticl:read-png-file *shot-path*))
     (typecase *shot-image*
       (opticl:8-bit-rgb-image
        (locally  
@@ -146,9 +149,9 @@
 
 (defun guck ()
   (progn (shot-sym-down) 
+	 (revert-buffer "shot.png")
 	 ;; (shot-resize-opticl)
 	 ;; (sleep 0.2)
-	 (revert-buffer "shot.png")
 	 ;; (revert-buffer "shot-resize.png")
 	 ))
 
@@ -168,14 +171,29 @@
 	 (y (/ (cdr i) 2.0)))
     (list x y)))
 
+(defparameter *ratio* 1)
+(defparameter *scr-size-ori* (/ 1136 2))
+(defparameter *scr-size-jetzt* 1136.0)
+ 
+(defun calc-ratio ()
+     (setf *ratio* (/ *scr-size-ori* *scr-size-jetzt*)))
+
+(defun conv-mouse-pos ()
+  (let* ((i (nimm-mouse-pos))
+	 (x (* (car i) *ratio*))
+	 (y (* (cdr i) *ratio*)))
+    (list x y)))
+
+
 (defun druck ()
   (let* ((i (conv-mouse-pos))
 	 (x (car i))
 	 (y (cadr i)))
-       (touch x y)
+       (touch i)
        (setf (car *last-druck-point*) x)
        (setf (cadr *last-druck-point*) y)
        (format t "GEDRUCKT ~d ~d~%" x y)
+       (print "FER")
        *last-druck-point*))
 
 (defun druck-guck ()
@@ -186,3 +204,42 @@
 	 ))
 
 (defparameter *kiste* '())
+
+(defun qt-run ()
+  "venga quicktime player fue die iphone screen sharing"
+  (ccl:run-program "open" '("-a" "QuickTime Player") :wait nil :output t))
+
+(defun qt-kill ()
+  "quicktime player no mas"
+  (with-output-to-string (out)
+    (ccl:run-program "killall"
+		     '("QuickTime Player")
+		     :output out)))
+
+(defun que-winid-qt ()
+  "que ist die window id of app quicktime player"
+  (let ((tmp0 (with-output-to-string (out)
+		(let ((tmp (format nil "tell app \"QuickTime Player\" to id of window 1")))
+		  (ccl:run-program "osascript" 
+				   `("-e" ,tmp) :output out)))))
+   tmp0))
+
+(defun shot-local ()
+  "screenshot from quicktime player, save to *shot-path*"
+  (let ((winid (format nil "-l~a" (que-winid-qt))))
+		       (ccl:run-program "screencapture"
+					`(,winid ,(namestring *shot-path*)) :output t)))
+
+(defun guck-local ()
+  "shot-local y revert-buffer shot.png"
+  (progn (shot-local)
+	 (revert-buffer (file-namestring *shot-path*))))
+
+(defun read-shot-img ()
+  (defparameter *shot-image* (opticl:read-png-file *shot-path*)))
+
+(defun que-shot-size ()
+  "que ist die width y height of shot-img"
+  (opticl:with-image-bounds (height width)  *shot-image*
+    (list height width)))
+
