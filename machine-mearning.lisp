@@ -235,8 +235,9 @@
   (progn (shot-local)
 	 (revert-buffer (file-namestring *shot-path*))))
 
+;; TODO setf od. setq
 (defun read-shot-img ()
-  (defparameter *shot-image* (opticl:read-png-file *shot-path*)))
+  (setf *shot-image* (opticl:read-png-file *shot-path*)))
 
 (defun que-shot-size ()
   "que ist die width y height of shot-img"

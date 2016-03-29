@@ -1,0 +1,4 @@
+(mouse-pixel-position)
+
+(frame-parameter (selected-frame) 'left)
+(set-foreground-color "red")
