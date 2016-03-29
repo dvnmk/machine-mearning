@@ -4,6 +4,9 @@
 
 ;;; "machine-mearning" goes here. Hacks and glory await!
 
+(defparameter *ssh* nil)
+(defparameter *shot-image* nil)
+
 (defparameter *working-dir* 
   #P"/Users/dvnmk/quicklisp/local-projects/machine-mearning/")
 
@@ -164,12 +167,12 @@
 
 (defparameter *last-druck-point* '(0 0))
 
-(defun conv-mouse-pos ()
-  (let* ((i (nimm-mouse-pos))
-	 (x (- (/ (car i) 2.0)
-	       (/ *fringe-width* 2.0)))
-	 (y (/ (cdr i) 2.0)))
-    (list x y)))
+;; (defun conv-mouse-pos ()
+;;   (let* ((i (nimm-mouse-pos))
+;; 	 (x (- (/ (car i) 2.0)
+;; 	       (/ *fringe-width* 2.0)))
+;; 	 (y (/ (cdr i) 2.0)))
+;;     (list x y)))
 
 (defparameter *ratio* 1)
 (defparameter *scr-size-ori* (/ 1136 2))
