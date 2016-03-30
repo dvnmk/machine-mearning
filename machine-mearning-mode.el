@@ -52,7 +52,9 @@
   :lighter " (M)"
   :keymap (let ((map (make-sparse-keymap)))
 
-            (define-key map (kbd "<down-mouse-1>") #'druck)
+            (define-key map (kbd "<mouse-1>") #'foo)
+            (define-key map (kbd "<drag-mouse-1>") #'conv-mouse-drag)
+            (define-key map (kbd "C-c C-c") #'foo)
             
             ;; (define-key map (kbd "C-a")
             ;;   (lambda()(interactive)

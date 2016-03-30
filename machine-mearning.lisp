@@ -24,7 +24,7 @@
 ;; 		      :name "shot"
 ;; 		      :type "png"))
 
-;; (defparameter *shot-img* (imago:read-png *shot*))
+
 
 (defparameter *ssh-in* nil)
 
@@ -121,25 +121,47 @@
 
 (defun shot-resize-imagick ()
   (ccl:run-program "convert"
-		   '("/Users/dvnmk/quicklisp/local-projects/machine-mearning/shot.png" "-resize" "320x568" 
-		     "/Users/dvnmk/quicklisp/local-projects/machine-mearning/shot-resize.png")
+		   `(,(namestring *shot-path*)  "-resize" "320x568" 
+		      ,(namestring *shot-resize-path*))
 		   :wait t :output t))
 
-(defun revert-buffer (buf)
+(defun m-m/revert-buffer (buf)
+  (let ((tar-buf-path (namestring (merge-pathnames "shot.png" *working-dir*))))
+    (swank:eval-in-emacs
+     `(let ((tar-buf (get-buffer ,buf)))
+	(if tar-buf (with-current-buffer tar-buf
+		      (revert-buffer t t))
+	    (find-file ,tar-buf-path)))   )))
+
+
+(defparameter *qt-wrapper-path* (merge-pathnames "qt-wrapper" *working-dir*))
+
+;;
+(let ((shot-filename (file-namestring *shot-path*)))
   (swank:eval-in-emacs
-   `(with-current-buffer ,buf
-     (revert-buffer t t ))))
+   `(defun setup-weiter ()
+     ;; (setq *win* (get-buffer-window "qt-wrapper"))
+     (setq window-resize-pixelwise t)
+     (setq fit-window-to-buffer-horizontally t)
+     (progn
+       (switch-to-buffer "qt-wrapper")
+       (switch-to-buffer ,shot-filename)   ; unless buffer TODO
+       (fit-window-to-buffer)
+       (window-pixel-left *win*)))))
 
+(let ((path (namestring *qt-wrapper-path*)))
+  (swank:eval-in-emacs
+   `(defun setup-qt-wrapper ()
+      (let ((que (get-buffer-window "qt-wrapper")))
+	(if que (progn (setq *win* que)
+		       (setup-weiter))
+	    (progn (find-file ,path)
+		   (setup-qt-wrapper)))))))
 
-;; (swank:eval-in-emacs
-;;  '(defun revert-buffer-via-name (buf-name)
-;;    (with-current-buffer buf-name
-;;      (revert-buffer t t))))
-
-;; (defun shot-resize-opticl ()
-;;   (let* ((foo (opticl:read-png-file "/Users/dvnmk/quicklisp/local-projects/machine-mearning/shot.png"))
-;; 	(resized-foo-image (opticl:resize-image foo 568 320)))
-;;     (opticl:write-png-file "/Users/dvnmk/quicklisp/local-projects/machine-mearning/shot-resize.png" resized-foo-image)))
+(defun que-qt-wrapper-left ()
+  (setq *qt-wrapper-left* (swank:eval-in-emacs '(setup-qt-wrapper)))
+  (format t "*QT-WRAPPER-LEFT*: ~d, DEM NACHST, KALIBRATION M/ QUICKTIME PLAYER" *qt-wrapper-left*)
+  *qt-wrapper-left*)
 
 
 (defun shot-resize-opticl ()
@@ -151,44 +173,44 @@
     (opticl:write-png-file *shot-resize-path*  img)))
 
 (defun guck ()
+  "wifi ssh ver. <-> (guck-local)"
   (progn (shot-sym-down) 
-	 (revert-buffer "shot.png")
+	 (m-m/revert-buffer "shot.png")
 	 ;; (shot-resize-opticl)
 	 ;; (sleep 0.2)
 	 ;; (revert-buffer "shot-resize.png")
 	 ))
 
-(defun nimm-mouse-pos ()
-  (swank:eval-in-emacs
-   '(cdr (mouse-pixel-position))))
+;; kann genommen aus emacs variable werden. DONE
+(defparameter *fringe-width* (swank:eval-in-emacs
+			      '(car (window-fringes))))
 
-;; kann genommen aus emacs variable werden.
-(defparameter *fringe-width* 10)
-
+;; entscheiden (x y), (y x), (x . y), od. (y . x) TODO
 (defparameter *last-druck-point* '(0 0))
 
-;; (defun conv-mouse-pos ()
-;;   (let* ((i (nimm-mouse-pos))
-;; 	 (x (- (/ (car i) 2.0)
-;; 	       (/ *fringe-width* 2.0)))
-;; 	 (y (/ (cdr i) 2.0)))
-;;     (list x y)))
-
-(defparameter *ratio* 1)
+(defparameter *ratio* 0.5)
 (defparameter *scr-size-ori* (/ 1136 2))
 (defparameter *scr-size-jetzt* 1136.0)
  
 (defun calc-ratio ()
      (setf *ratio* (/ *scr-size-ori* *scr-size-jetzt*)))
 
+(defparameter *qt-wrapper-left* nil)
+
+(defun nimm-mouse-pos ()
+  (swank:eval-in-emacs
+   '(cdr (mouse-pixel-position))))
+
 (defun conv-mouse-pos ()
+  "convert the nimm-mouse-pos-gt value im verzueglich mit window"
   (let* ((i (nimm-mouse-pos))
-	 (x (* (car i) *ratio*))
+	 (x (* (- (car i) *qt-wrapper-left* *fringe-width*)
+	       *ratio*))
 	 (y (* (cdr i) *ratio*)))
     (list x y)))
 
-
 (defun druck ()
+  "druck the current mouse point y setf *last-drcuk-point*"
   (let* ((i (conv-mouse-pos))
 	 (x (car i))
 	 (y (cadr i)))
@@ -196,7 +218,6 @@
        (setf (car *last-druck-point*) x)
        (setf (cadr *last-druck-point*) y)
        (format t "GEDRUCKT ~d ~d~%" x y)
-       (print "FER")
        *last-druck-point*))
 
 (defun druck-guck ()
@@ -231,19 +252,38 @@
   "screenshot from quicktime player, save to *shot-path*"
   (let ((winid (format nil "-l~a" (que-winid-qt))))
 		       (ccl:run-program "screencapture"
-					`(,winid ,(namestring *shot-path*)) :output t)))
+					`(,winid "-o" ,(namestring *shot-path*)) :output t)))
 
 (defun guck-local ()
-  "shot-local y revert-buffer shot.png"
+  "shot-local y m-m/revert-buffer shot.png"
   (progn (shot-local)
-	 (revert-buffer (file-namestring *shot-path*))))
+	 (m-m/revert-buffer (file-namestring *shot-path*))))
 
 ;; TODO setf od. setq
 (defun read-shot-img ()
-  (setf *shot-image* (opticl:read-png-file *shot-path*)))
+  (setq *shot-image* (opticl:read-png-file *shot-path*))
+  ;; 'read-shot-img
+  (format t "> (read-shot-img)-gt"))
 
 (defun que-shot-size ()
   "que ist die width y height of shot-img"
   (opticl:with-image-bounds (height width)  *shot-image*
     (list height width)))
 
+(defun que-shot-ratio ()
+  (let ((tmp (que-shot-size)))
+    (/ (car tmp) (cadr tmp) 1.0)))
+
+(defun guck-read-que-local ()
+  (progn (guck-local)
+	 (read-shot-img)
+	 (que-shot-size)))
+
+(defvar *el-path* (merge-pathnames "machine-mearning-mode.el" *working-dir*))
+(swank:eval-in-emacs `(load ,(namestring *el-path*)))
+
+(defun licht- ()
+  (cmd "activator send libactivator.screen.brightness.decrease"))
+
+(defun licht+ ()
+  (cmd "activator send libactivator.screen.brightness.increase"))

@@ -2,5 +2,5 @@
 
 (defpackage #:machine-mearning
   (:use #:cl)
-  (:nicknames :mm))
+  (:nicknames :m-m))
 

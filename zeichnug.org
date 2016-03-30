@@ -1,7 +1,9 @@
 * TODO 
 ** touch point kalibration
 ** pixel-position via cons od. list
-** 
+** swipe
+** ACTIVATOR MACRO
+
 * SIZE
 ** (1136 640)
 ** (1280 758)
@@ -9,96 +11,18 @@
 ** (888 537)
 ** (706 434)
 
+* ACHTUNG
+** erstmal (qt-run) dann (connect)?
+*** iphn mode change, than disconnect, deswegen
 
+* MEMO
 (defun foo (event)
   (interactive "e")
   (let* ((mouse-pos-0  (event-start event))
          (mouse-pos-1 (event-end event)))
     (print mouse-pos-0)))
-foo
+
 (define-key machine-mearning-mode-map [down-mouse-1] #'foo)
-
-(progn
-  (select-frame-by-name "qt-wrapper")
-  (mouse-pixel-position)
-  (next-frame))
-#<frame *scratch* 0x106968318>
-(frame-list)
-(#<frame qt-wrapper 0x12289f000> #<frame *scratch* 0x106968318>)
-
-
-#<frame *scratch* 0x106968318>
-
-#<frame *scratch* 0x106968318>
-
-
-
-(#<frame qt-wrapper 0x12289f000> 111 . 329)
-
-
-(with-selected-frame (other-frame 1)
-  (message "hier"))
-(select-frame )
-(select-frame-by-name "qt-wrapper")
-nil
-(make-frame )
-#<frame Emacs@dmb.local 0x110888f70>
-(druck)
-
-(2slime "(druck)")
-"(69.5 262.5)"
-(slime-eval '(swank:ev))
-(selected-frame)
-#<frame *scratch* 0x106968318>
-(select-frame)
-(select-frame-by-name "*scratch*")
-nil
-
-(cadr (frame-list))
-(#<frame *scratch* 0x106968318>)
-(visible-frame-list)
-(#<frame *scratch* 0x106968318> #<frame qt-wrapper 0x12289f000>)
-
-(selected-frame)
-(select-frame <frame *scratch* 0x106968318>)
-(other-frame 1)
-(current-frame-configuration)
-(frame-configuration (#<frame qt-wrapper 0x12289f000> ((tool-bar-position . top) (parent-id) (explicit-name) (display . "Mac") (visibility . t) (icon-name) (window-id . "4536017312") (top . 0) (left . 1) (buried-buffer-list #<buffer *Backtrace*> #<buffer  *which-key*>) (buffer-list #<buffer qt-wrapper> #<buffer  *Minibuf-1*> #<buffer *inferior-lisp*> #<buffer init.el> #<buffer shot.png> #<buffer *eshell*<42>> #<buffer *scratch*>) (unsplittable) ...) #<window-configuration>) (#<frame *scratch* 0x106968318> ((tool-bar-position . top) (parent-id) (explicit-name) (display . "Mac") (visibility . t) (icon-name) (window-id . "4318402704") (top . 1) (left . 685) (buried-buffer-list #<buffer *Help*> #<buffer *Backtrace*> #<buffer  *which-key*> #<buffer *Ibuffer*> #<buffer Screenshots> #<buffer Screenshot 2016-03-27 14.28.20.png> #<buffer *Packages*> #<buffer *Completions*>) (buffer-list #<buffer *scratch*> #<buffer *info*> #<buffer  *Minibuf-1*> #<buffer *slime-repl ccl*> #<buffer *terminal<1>*> #<buffer *eshell*<42>> #<buffer init.el> #<buffer machine-mearning.lisp> #<buffer *inferior-lisp*> #<buffer shot.png> #<buffer shot-resize.png> ...) (unsplittable) ...) #<window-configuration>))
-
-
-
-(window-list)
-(#<window 65 on *scratch*> #<window 111 on *slime-repl ccl*> #<window 75 on machine-mearning.lisp> #<window 73 on machine-mearning-mode.el> #<window 77 on *info*>)
-(current-frame-configuration)
-(frame-configuration (#<frame qt-wrapper 0x12289f000> ((tool-bar-position . top) (parent-id) (explicit-name) (display . "Mac") (visibility . t) (icon-name) (window-id . "4536017312") (top . 0) (left . 1) (buried-buffer-list #<buffer *Backtrace*> #<buffer  *which-key*>) (buffer-list #<buffer qt-wrapper> #<buffer  *Minibuf-1*> #<buffer *inferior-lisp*> #<buffer init.el> #<buffer shot.png> #<buffer *eshell*<42>> #<buffer *scratch*>) (unsplittable) ...) #<window-configuration>) (#<frame *scratch* 0x106968318> ((tool-bar-position . top) (parent-id) (explicit-name) (display . "Mac") (visibility . t) (icon-name) (window-id . "4318402704") (top . 1) (left . 685) (buried-buffer-list #<buffer *Backtrace*> #<buffer *Help*> #<buffer  *which-key*> #<buffer *Ibuffer*> #<buffer Screenshots> #<buffer Screenshot 2016-03-27 14.28.20.png> #<buffer *Packages*> #<buffer *Completions*>) (buffer-list #<buffer *scratch*> #<buffer *info*> #<buffer *slime-repl ccl*> #<buffer machine-mearning.lisp> #<buffer machine-mearning-mode.el> #<buffer  *Minibuf-1*> #<buffer *eshell*<42>> #<buffer subr.el.gz> #<buffer *terminal<1>*> #<buffer init.el> #<buffer *inferior-lisp*> ...) (unsplittable) ...) #<window-configuration>))
-
-
-(frame-width)
-173
-(frame-height)
-71
-(set-frame-positione)
-(fram)
-
-(slime-eval "(druck)")
-(slime-eval '(druck))
-(set-frame-width (selected-frame) 500 500)
-(progn (show-frame "qt-wrapper")
-       (mouse-pixel-position))
-(#<frame *scratch* 0x106968318> -619 . 473)
-
-(#<frame *scratch* 0x106968318> -567 . 103)
-(frame-parameter (selected-frame) 'left)
-680
-
-(frame-parameter (selected-frame) 'top)
-
-
-
-
-
-
-
 
 (defun mouse-start-rectangle (start-event)                        
   (interactive "e")                                               

@@ -1,4 +1,32 @@
-(mouse-pixel-position)
+;;
+(setup-qt-wrapper)
+(split-window-right)
+(window-pixel-width)
+(window-pixel-height)
+578
+757
 
-(frame-parameter (selected-frame) 'left)
-(set-foreground-color "red")
+# # (current-window-configuration)
+# # #<window-configuration>
+# # (jump-to-register "foo")
+
+   (WINDOW POS-OR-AREA (X . Y) TIMESTAMP
+      OBJECT TEXT-POS (COL . ROW)
+      IMAGE (DX . DY) (WIDTH . HEIGHT))
+
+(defun conv-mouse-drag (event)
+  (interactive "e")
+  (let* ((pos-0 (event-start event))
+	 (pos-1 (event-end event))
+	 (x (posn-x-y pos-0))
+	 (y (posn-x-y pos-1))
+	 (dt (/ (- (posn-timestamp pos-1)
+		   (posn-timestamp pos-0))
+		1000.0)))
+    (message "%s ->  %s wahrend %s" x y dt)
+    `(,pos-0 ,pos-1 dt)    ))
+
+=>
+((209 . 333) (268 . 399) 0.42)
+->
+(touch 209 333 268 399 0.42)
