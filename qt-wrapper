@@ -18,13 +18,25 @@
   (interactive "e")
   (let* ((pos-0 (event-start event))
 	 (pos-1 (event-end event))
-	 (x (posn-x-y pos-0))
-	 (y (posn-x-y pos-1))
+	 (pt1 (posn-x-y pos-0))
+	 (pt2 (posn-x-y pos-1))
 	 (dt (/ (- (posn-timestamp pos-1)
 		   (posn-timestamp pos-0))
 		1000.0)))
-    (message "%s ->  %s wahrend %s" x y dt)
-    `(,pos-0 ,pos-1 dt)    ))
+    (message "%s ->  %s wahrend %s" pt1 pt2 dt)
+    (list (car pt1) (cdr pt1) (car pt2) (cdr pt2) dt)))
+
+
+(defun conv-mouse-click (event)
+  (interactive "e")
+  (let* ((pos-0 (event-start event))
+	
+	 (pt0 (posn-x-y pos-0))
+	
+	 (ts (posn-timestamp pos-0))
+	)
+    (message "%s at %s" pt0 ts)
+    (list (car pt0) (cdr pt0) ts)))
 
 =>
 ((209 . 333) (268 . 399) 0.42)
