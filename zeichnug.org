@@ -4,6 +4,11 @@
 ** swipe
 ** ACTIVATOR MACRO
 
+* SYNOPSIS
+** (init)
+*** (fit-again)
+** 
+
 * SIZE
 ** (1136 640)
 ** (1280 758)
@@ -16,13 +21,21 @@
 *** iphn mode change, than disconnect, deswegen
 
 * MEMO
-(defun foo (event)
-  (interactive "e")
-  (let* ((mouse-pos-0  (event-start event))
-         (mouse-pos-1 (event-end event)))
-    (print mouse-pos-0)))
 
-(define-key machine-mearning-mode-map [down-mouse-1] #'foo)
+(defun mouse-start-rectangle (start-event)
+  (interactive "e")
+  (deactivate-mark)
+  (mouse-set-point start-event)
+  (rectangle-mark-mode +1)
+  (let ((drag-event))
+    (track-mouse
+      (while (progn
+               (setq drag-event (read-event))
+               (mouse-movement-p drag-event))
+        (mouse-set-point drag-event)))))
+
+(global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)
+
 
 (defun mouse-start-rectangle (start-event)                        
   (interactive "e")                                               
@@ -38,28 +51,5 @@
 	       (mouse-movement-p drag-event))                     
 	(mouse-set-point drag-event)
 	(message "%s" (mouse-pixel-position))))))
-
-(global-set-key (kbd "H-<down-mouse-1>") #'mouse-start-rectangle)
-
-(global-set-key (kbd "<mouse-1>") #'foo-touch)
-(global-set-key (kbd "H-<drag-mouse-1>") #'foo)
-
-(defun foo-touch (event)
-  (interactive "e")
-  (let ((pos-0 (event-start event))
-)
-    (message "%s" (posn-x-y pos-0))
-    ))
-
-
-(defun foo (event)
-  (interactive "e")
-  (let ((pos-0 (event-start event))
-	(pos-1 (event-end event)))
-    (message "%s at %s -> %s at %s"
-	     (posn-x-y pos-0) (posn-timestamp pos-0)
-	     (posn-x-y pos-1) (posn-timestamp pos-1))
-    ))
-
 
 

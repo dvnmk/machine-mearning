@@ -30,21 +30,28 @@
 
 (defun connect ()
   (progn
-    (defparameter *ssh* (ccl:run-program "ssh"
+    (defparameter *ssh* (external-program:start "ssh"
 					'("-t" "-t" "mobile@localhost" "-p" "2000")
-					:output t :input :stream :wait nil
-					:sharing :external))
-    (defparameter *ssh-in* (ccl:external-process-input-stream *ssh*))))
+					:output t :input :stream 
+								 ;; :wait nil
+					;; :sharing :external
+							  ))
+    (defparameter *ssh-in* (external-program:process-input-stream *ssh*))))
 
 (defun disconnect ()
-  (ccl:signal-external-process *ssh* 9))
+  (external-program:signal-process *ssh* 9))
 
 (defun cmd (cmd)
   (progn (format *ssh-in* "~D~%" cmd)
 	 (finish-output *ssh-in*)))
  
-(defun swipe (x1 y1 x2 y2 dura)
-  (let ((cmd (format nil "stouch swipe ~S ~S ~S ~S ~S" x1 y1 x2 y2 dura)))
+(defun swipe (lst)
+  (let* ((x1 (nth 0 lst))
+	(y1 (nth 1 lst))
+	(x2 (nth 2 lst))
+	(y2 (nth 3 lst))
+	(dura (nth 4 lst))
+	(cmd (format nil "stouch swipe ~S ~S ~S ~S ~S" x1 y1 x2 y2 dura)))
     (cmd cmd)))
 
 (defun touch (lst)
@@ -98,7 +105,7 @@
 
 ;; pathname TODO
 (defun shot-down ()
-  (ccl:run-program "rsync"
+  (external-program:run "rsync"
 		   `("-v" "-e ssh \'-p 2000\'" "-L"
 		     ;; "--progress"
 		     ,*remote-file*
@@ -120,7 +127,7 @@
     ))
 
 (defun shot-resize-imagick ()
-  (ccl:run-program "convert"
+  (external-program:run "convert"
 		   `(,(namestring *shot-path*)  "-resize" "320x568" 
 		      ,(namestring *shot-resize-path*))
 		   :wait t :output t))
@@ -139,38 +146,49 @@
 ;;
 (let ((shot-filename (file-namestring *shot-path*)))
   (swank:eval-in-emacs
-   `(defun setup-weiter ()
-     ;; (setq *win* (get-buffer-window "qt-wrapper"))
-     (setq window-resize-pixelwise t)
-     (setq fit-window-to-buffer-horizontally t)
-     (progn
-       (switch-to-buffer "qt-wrapper")
-       (switch-to-buffer ,shot-filename)   ; unless buffer TODO
-       (fit-window-to-buffer)
-       (window-pixel-left *win*)))))
+   `(defun setup-fit ()
+      (setq window-resize-pixelwise t)
+      (setq fit-window-to-buffer-horizontally t)
+      (progn
+	(other-window 1)
+	(switch-to-buffer ,shot-filename) 
+	(setq *win* (get-buffer-window ,shot-filename))
+	(fit-window-to-buffer)
+	(window-pixel-left *win*))
+      )))
 
-(let ((path (namestring *qt-wrapper-path*)))
+(let ((qt-filename (namestring *qt-wrapper-path*))
+      (shot-filename (namestring *shot-path* )))
   (swank:eval-in-emacs
-   `(defun setup-qt-wrapper ()
-      (let ((que (get-buffer-window "qt-wrapper")))
-	(if que (progn (setq *win* que)
-		       (setup-weiter))
-	    (progn (find-file ,path)
-		   (setup-qt-wrapper)))))))
+   `(defun setup-wins ()
+      (setq window-resize-pixelwise t)
+      (setq fit-window-to-buffer-horizontally t)
+      (progn (split-window-right)
+	     (other-window 1)
+	     (find-file ,qt-filename)
+	     (find-file ,shot-filename)
+	     (setq *win* (get-buffer-window ,shot-filename))
+	     (fit-window-to-buffer)
+	     (window-pixel-left *win*)))))
 
-(defun que-qt-wrapper-left ()
-  (setq *qt-wrapper-left* (swank:eval-in-emacs '(setup-qt-wrapper)))
+(defparameter *qt-wrapper-left* 0)
+
+(defun init ()
+  (setq *qt-wrapper-left* (swank:eval-in-emacs '(setup-wins)))
   (format t "*QT-WRAPPER-LEFT*: ~d, DEM NACHST, KALIBRATION M/ QUICKTIME PLAYER" *qt-wrapper-left*)
   *qt-wrapper-left*)
 
+(defun fit-again ()
+  (setq *qt-wrapper-left* (swank:eval-in-emacs '(setup-fit)))
+  (format t "*QT-WRAPPER-LEFT*: ~d, DEM NACHST, KALIBRATION M/ QUICKTIME PLAYER" *qt-wrapper-left*)
+  *qt-wrapper-left*)
 
 (defun shot-resize-opticl ()
+  (declare (optimize (speed 3) (safety 0)))
   (let ((img (opticl:resize-image *shot-image* 568 320)))
-    (typecase img
-      (opticl:8-bit-rgb-image
-       (locally
-	   (declare (type )))))
+    (declare (type opticl:8-bit-rgb-image img))
     (opticl:write-png-file *shot-resize-path*  img)))
+
 
 (defun guck ()
   "wifi ssh ver. <-> (guck-local)"
@@ -201,14 +219,6 @@
   (swank:eval-in-emacs
    '(cdr (mouse-pixel-position))))
 
-(defun conv-mouse-pos ()
-  "convert the nimm-mouse-pos-gt value im verzueglich mit window"
-  (let* ((i (nimm-mouse-pos))
-	 (x (* (- (car i) *qt-wrapper-left* *fringe-width*)
-	       *ratio*))
-	 (y (* (cdr i) *ratio*)))
-    (list x y)))
-
 (defun druck ()
   "druck the current mouse point y setf *last-drcuk-point*"
   (let* ((i (conv-mouse-pos))
@@ -231,27 +241,27 @@
 
 (defun qt-run ()
   "venga quicktime player fue die iphone screen sharing"
-  (ccl:run-program "open" '("-a" "QuickTime Player") :wait nil :output t))
+  (external-program:start "open" '("-a" "QuickTime Player") :output t))
 
 (defun qt-kill ()
   "quicktime player no mas"
   (with-output-to-string (out)
-    (ccl:run-program "killall"
+    (external-program:run "killall"
 		     '("QuickTime Player")
 		     :output out)))
-
+ 
 (defun que-winid-qt ()
   "que ist die window id of app quicktime player"
   (let ((tmp0 (with-output-to-string (out)
 		(let ((tmp (format nil "tell app \"QuickTime Player\" to id of window 1")))
-		  (ccl:run-program "osascript" 
+		  (external-program:run "osascript" 
 				   `("-e" ,tmp) :output out)))))
    tmp0))
 
 (defun shot-local ()
   "screenshot from quicktime player, save to *shot-path*"
   (let ((winid (format nil "-l~a" (que-winid-qt))))
-		       (ccl:run-program "screencapture"
+		       (external-program:run "screencapture"
 					`(,winid "-o" ,(namestring *shot-path*)) :output t)))
 
 (defun guck-local ()
@@ -259,11 +269,10 @@
   (progn (shot-local)
 	 (m-m/revert-buffer (file-namestring *shot-path*))))
 
-;; TODO setf od. setq
-(defun read-shot-img ()
-  (setq *shot-image* (opticl:read-png-file *shot-path*))
-  ;; 'read-shot-img
-  (format t "> (read-shot-img)-gt"))
+(defun shot-read ()
+  (declare (optimize (speed 3) (safety 0)))
+  (setf *shot-image* (opticl:read-png-file *shot-path*))
+  '*shot-img*)
 
 (defun que-shot-size ()
   "que ist die width y height of shot-img"
@@ -276,7 +285,7 @@
 
 (defun guck-read-que-local ()
   (progn (guck-local)
-	 (read-shot-img)
+	 (shot-read)
 	 (que-shot-size)))
 
 (defvar *el-path* (merge-pathnames "machine-mearning-mode.el" *working-dir*))
@@ -287,3 +296,46 @@
 
 (defun licht+ ()
   (cmd "activator send libactivator.screen.brightness.increase"))
+
+
+(defun red-msg (msg color)
+  "Insert red color msg at the end of buffer in the buffer qt-wrapper"
+  (let ((wo (file-namestring *qt-wrapper-path*)))
+    (swank::eval-in-emacs
+     `(with-current-buffer ,wo
+	(end-of-buffer)
+	(insert (propertize ,msg 'font-lock-face '(:foreground ,color)))))))
+
+(defun halbe (etwas-lst)
+  "alle ele in list mit ratio"
+  (mapcar (lambda (x) (* x *ratio*)) etwas-lst))
+
+(defun drag-passiert (lst)
+  (let ((msg (format nil "~A" (halbe lst)))
+	(converted-poen-lst (halbe lst)))
+    (progn (swipe converted-poen-lst)
+	   (red-msg msg "violet") ; debug
+	   (swank:eval-in-emacs 
+	    `(message "DRAG-passiert: %s" ,msg)))))
+
+
+(defun click-passiert (lst)
+  (let ((msg (format nil "~A" lst)) ;; nur poen halbe, ohne timestamp
+	 (poen-conv (list (* (car lst) *ratio*) (* (cadr lst) *ratio*))))
+    (progn (touch poen-conv)
+	   (red-msg msg "red") ; debug
+	   (swank:eval-in-emacs
+	    `(message "CLICK-passiert: %s retina" ,msg )))))
+
+(defun poen-conv (lst)
+  "retina poen position -> normal resolution fuer touch cmd"
+  (let ((x (* (- (car lst) *qt-wrapper-left* *fringe-width*)
+	      *ratio*))
+	(y (* (cadr lst) *ratio*)))
+    (list x y)))
+
+(defun conv-mouse-pos ()
+  "convert the nimm-mouse-pos-gt value im verzueglich mit window"
+  (let* ((poen-cons (nimm-mouse-pos))
+	 (poen-lst (list (car poen-cons) (cdr poen-cons))))
+    (poen-conv poen-lst)))

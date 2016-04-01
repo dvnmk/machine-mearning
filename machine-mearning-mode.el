@@ -1,11 +1,11 @@
-;;; machine-mearning-buffer.el --- a physikal buffer, connecting with the machschine >>STARTX<< in Emacs -*- lexical-binding: t; -*
+;;; machine-mearning-buffer.el --- TODO -*- lexical-binding: t; -*
 
 ;; Copyright (C) 2016 by dvnmk
 ;;
 ;; Author: dvnmk <divinomok@gmail.com>
 ;; URL: https://github.com/dvnmk/machine-mearning
 ;; DEMO: https://vimeo.com/bacq/machine-mearning
-;; Keywords: buffer, physical
+;; Keywords: TODO
 ;; Version: minus-moebius
 
 ;; This file is NOT a part of GNU Emacs.
@@ -16,7 +16,6 @@
 ;;; Commentary:
 
 ;;; Code:
-
 
 ;;; helper
 (defun 2slime (str)
@@ -52,19 +51,11 @@
   :lighter " (M)"
   :keymap (let ((map (make-sparse-keymap)))
 
-            (define-key map (kbd "<mouse-1>") #'foo)
-            (define-key map (kbd "<drag-mouse-1>") #'conv-mouse-drag)
+            (define-key map (kbd "<mouse-1>") #'qt-mouse-click)
+            (define-key map (kbd "<drag-mouse-1>") #'qt-mouse-drag)
             (define-key map (kbd "C-c C-c") #'foo)
             
-            ;; (define-key map (kbd "C-a")
-            ;;   (lambda()(interactive)
-            ;;     (beginning-of-visual-line)
-            ;;     (setq wo 0)
-            ;;     (message "DEBUG// C-a, anfang")))
-
-            map)
-  )
-
+	    map)  )
 
 (provide 'machine-mearning-mode)
 
