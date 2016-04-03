@@ -1,6 +1,6 @@
 ;;;; package.lisp
 
 (defpackage #:machine-mearning
-  (:use #:cl)
+  (:use #:cl #:iterate)
   (:nicknames :m-m))
 

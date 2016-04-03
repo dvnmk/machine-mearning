@@ -1,9 +1,28 @@
-* TODO 
-** touch point kalibration
-** pixel-position via cons od. list
-** swipe
-** ACTIVATOR MACRO
+* image scanner
+** (foo img start-poen end-poen)
+** citibank
+*** y 701 797 893 dy=96
+*** x 31 89  dx=58
+* "1234" zu tastatur
+** (postion #\a fmap) => 20
+** (wo 20) => (x y)
 
+
+* ZU MACHEN
+** DONE touch point kalibration
+** DONE pixel-position via cons od. list
+** DONE swipe
+** TODO ACTIVATOR MACRO
+** TODO -mode.el richtig hinzufuegen 
+** TODO record system
+** TODO opticl
+** TODO keyboard zu swipe, pgdn/pgup
+** TODO 
+
+* HISTORY
+** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man xs
+** was bedeute die automatische maschine, A.I., Roboten, usw.? man sagt, wegen die ai roboten koentten die leute die arbeit verloren. 
+  
 * SYNOPSIS
 ** (init)
 *** (fit-again)
