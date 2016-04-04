@@ -8,6 +8,8 @@
   :serial t
   :components ((:file "package")
 	       (:file "shot")
-               (:file "machine-mearning")))
+               (:file "machine-mearning")
+               (:file "key")
+	       ))
 
 

@@ -17,7 +17,7 @@
 ** TODO record system
 ** TODO opticl
 ** TODO keyboard zu swipe, pgdn/pgup
-** TODO 
+** TODO in qt-wrapper disable the mark set feature
 
 * HISTORY
 ** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man xs
