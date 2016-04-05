@@ -105,6 +105,7 @@
 
             (define-key map (kbd "<mouse-1>") #'qt-mouse-click)
             (define-key map (kbd "<drag-mouse-1>") #'qt-mouse-drag)
+            (define-key map (kbd "<down-mouse-1>") (lambda () (interactive) (message "Machine-Mearning>")))
             (define-key map (kbd "C-c C-c") #'foo)
             ;; (define-key map [down-mouse-1] 'nil)
 	    ;; (define-key map [drag-mouse-1 'nil])

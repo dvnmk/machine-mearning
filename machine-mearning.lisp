@@ -204,25 +204,29 @@
   (mapcar (lambda (x) (* x *ratio*)) etwas-lst))
 
 (defun drag-passiert (lst)
-  (let ((msg (format nil "~A" (halbe lst)))
-	(converted-poen-lst (halbe lst)))
-    (progn  (if *record-status* (push converted-poen-lst *record-kiste*))
-	    ;; (swipe converted-poen-lst)
-	    (red-msg msg "violet") ; debug
+  (let* ((convrted-poen-lst (list (* (nth 0 lst) *ratio*)
+			      (* (nth 1 lst) *ratio*)
+			      (* (nth 2 lst) *ratio*)
+			      (* (nth 3 lst) *ratio*)
+			      (nth 4 lst)))
+	 (msg (format nil "~A" convrted-poen-lst)))
+    (progn  (if *record-status* (push convrted-poen-lst *record-kiste*))
+	    ;; (swipe convrted-poen-lst)
+	    (red-msg msg "darkcyan") ; debug
 	    (swank:eval-in-emacs 
 	     `(message "DRAG-passiert: %s" ,msg)))))
 
 
 (defun  click-passiert (lst)
-  (let ((msg (format nil "~A" lst)) ;; nur poen halbe, /m timestamp
-	(poen-conv (list (* (car lst) *ratio*) ; x
+  (let* ((convrted-poen-lst (list (* (car lst) *ratio*) ; x
 			 (* (cadr lst) *ratio*) ; y
-			 (caddr lst)))) ; ts
-    (progn (if *record-status* (push  poen-conv *record-kiste*))
-	   ;; (touch poen-conv) ; soll ohne ts
-	   (red-msg msg "red")	; debug
+			 (caddr lst)))
+	 (msg (format nil "~A" convrted-poen-lst)))			; ts
+    (progn (if *record-status* (push  convrted-poen-lst *record-kiste*))
+	   ;; (touch convrted-poen-lst) ; soll ohne ts
+	   (red-msg msg "black")	; debug
 	   (swank:eval-in-emacs
-	    `(message "CLICK-passiert: %s retina" ,msg )))))
+	    `(message "CLICK-passiert: %s" ,msg )))))
 
 (defun poen-conv (lst)
   "retina poen position -> normal resolution fuer touch cmd"
