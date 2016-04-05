@@ -1,16 +1,17 @@
 ;; key.lisp keyboard reader
 (in-package #:machine-mearning)
 
-(defun iter-box ()
-    (let ((x0 80)
-       (y0 806)
-       (dx 159)
-       (dy 94)
-       (x-times 3)
-       (y-times 3))
-   (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
-	 (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
-			(collect (list x y)))))))
+(defun iter-box-rvrs (x0 y0 dx dy x-times y-times)
+  (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
+	(collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
+		       (collect (list x y)))
+	  at beginning))) 
+
+
+(defun iter-box (x0 y0 dx dy x-times y-times)
+  (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
+	(collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
+		       (collect (list x y)))))) 
 
 (defun mach-numpad ()
   "normal no security pad , (nil nil ok 1 2 3 4 5 6 7 8 nil 0 backspace)"
@@ -27,11 +28,11 @@
 (defparameter *numpad-xy-map* (mach-numpad))
 
 (defun wozu-nth-btn-numpad (x)
-  (let ((row-0 (nth 0 *num-pad-xy-map*))
-	(row-1 (nth 1 *num-pad-xy-map*))
-	(row-2 (nth 2 *num-pad-xy-map*))
-	(row-3 (nth 3 *num-pad-xy-map*))
-	(row-4 (nth 4 *num-pad-xy-map*)))
+  (let ((row-0 (nth 0 *numpad-xy-map*))
+	(row-1 (nth 1 *numpad-xy-map*))
+	(row-2 (nth 2 *numpad-xy-map*))
+	(row-3 (nth 3 *numpad-xy-map*))
+	(row-4 (nth 4 *numpad-xy-map*)))
     (case x
       (0 (nth 2 row-0)) ; confirm
       (1 (nth 0 row-1))
@@ -73,7 +74,6 @@
 			 (unless (equal (opticl:pixel* *shot-img* y x) quux)
 			   (collect (list x y))))))))
 
-
 (defun loch-finden-secupad ()
   (let ((x0 80)
 	(y0 806)
@@ -82,7 +82,7 @@
 	(x-times 3)
 	(y-times 2)
 	(dx-boxy 10)
-	(dy-boxy 10)
+	(dy-boxy 1)
 	(qux (list 0 0 0)))
     (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
 	  (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
@@ -128,12 +128,7 @@
 	  ((< x #2=(+ #1# len-2))	(nth (- x #1#) row-2))
 	  (t				(nth (- x #2#) row-3)))))
 
-;; ^ shift 
-;; !! backspace 
-;; $ change-keyboard? 
-;; @ en-@
-;; #### spacebar
-;; //// return
+;; ^ shift ! backspace $ change-keyboard? @ en-@ # spacebar / return
 (defparameter *citi-key-seq* "1234567890qwertyuiopasdfghjkl^zxcvbnm!!$$@@####////")
 
 (defparameter *secupad-key-seq* "1234567890!/")
@@ -158,3 +153,58 @@
   (mapcar #'touch-diese-char-secupad (coerce string-x 'list)))
 
 
+(defun crack-secupad ()
+  (progn (shot-sym-down)
+	 (shot-read)
+	 (setf *loch-gefunden-xy-map* (loch-finden-secupad))))
+
+
+(defun crack-citi ()
+  (progn (shot-sym-down)
+	 (shot-read)
+	 (setf *loch-gefunden-xy-map* (loch-finden-citi))))
+
+
+;; enkey
+(defun mach-enkey ()
+  "x0 y0 dx dy row col"  
+  (let* ((row-0 (list 32 766 64 1 9 0))
+	 (row-1 (list 64 874 64 1 8 0))
+	 (row-2 (list 61 989 54 1 8 0))
+	 (row-3 (list 35 1100 61 1 8 0))
+	 (xy-0 (eval `(iter-box ,@row-0)))
+	 (xy-1 (eval `(iter-box ,@row-1)))
+	 (xy-2 (eval `(iter-box ,@row-2)))
+	 (xy-3 (eval `(iter-box ,@row-3)))
+	 )
+    (append xy-0 xy-1 xy-2 xy-3)))
+
+(defparameter *enkey-xy-map* (mach-enkey))
+
+;; TODO kali  m/ lezte row
+;; ^ shift, ! bs $ num @ kbd # spc / ok
+(defparameter *enkey-seq* "qweertyuiopasdfghjkl^zxcvbnm!$@#/")
+
+(defun wozu-nth-btn-enkey (x)
+  "nth btn => position (x y)"
+  (let* ((row-0 (nth 0 *enkey-xy-map*))
+	 (row-1 (nth 1 *enkey-xy-map*))
+	 (row-2 (nth 2 *enkey-xy-map*))
+	 (row-3 (nth 3 *enkey-xy-map*))
+	 (len-0 (length row-0))
+	 (len-1 (length row-1))
+	 (len-2 (length row-2)))
+    (cond ((< x len-0)			(nth x row-0))
+	  ((< x #1=(+ len-0 len-1))	(nth (- x len-0) row-1))
+	  ((< x #2=(+ #1# len-2))	(nth (- x #1#) row-2))
+	  (t				(nth (- x #2#) row-3)))))
+
+
+(defun touch-diese-char-enkey (char-x)
+  (let* ((ori-xy (wozu-nth-btn-enkey (position char-x *enkey-seq*)))
+	 (tar-xy (halbe ori-xy)))
+    ;; (princ ori-xy)
+    (touch tar-xy)))
+
+(defun type-string-enkey (string-x)
+  (mapcar #'touch-diese-char-enkey (coerce string-x 'list)))
