@@ -171,8 +171,6 @@
 	 *last-druck-point*
 	 ))
 
-(defparameter *kiste* '())
-
 (defun qt-run ()
   "venga quicktime player fue die iphone screen sharing"
   (external-program:start "open" '("-a" "QuickTime Player") :output t))
@@ -209,6 +207,7 @@
   (let ((msg (format nil "~A" (halbe lst)))
 	(converted-poen-lst (halbe lst)))
     (progn  (if *record-status* (push converted-poen-lst *record-kiste*))
+	    ;; (swipe converted-poen-lst)
 	    (red-msg msg "violet") ; debug
 	    (swank:eval-in-emacs 
 	     `(message "DRAG-passiert: %s" ,msg)))))
@@ -220,7 +219,8 @@
 			 (* (cadr lst) *ratio*) ; y
 			 (caddr lst)))) ; ts
     (progn (if *record-status* (push  poen-conv *record-kiste*))
-	   (red-msg msg "red") ; debug
+	   ;; (touch poen-conv) ; soll ohne ts
+	   (red-msg msg "red")	; debug
 	   (swank:eval-in-emacs
 	    `(message "CLICK-passiert: %s retina" ,msg )))))
 
@@ -257,4 +257,6 @@
 	  '(message "*record-kiste* LEER-gt"))))
 
 ;; *record-kiste* to fun converter
+;; cond el in list ist 4 length, ist es ein swipe so, einfach (swipe)
+;; wenn es 3, dann ist es ein touch. denk mal dran dit timestampe
 
