@@ -184,47 +184,7 @@
 		     '("QuickTime Player")
 		     :output out)))
  
-(defun que-winid-qt ()
-  "que ist die window id of app quicktime player"
-  (let ((tmp0 (with-output-to-string (out)
-		(let ((tmp (format nil "tell app \"QuickTime Player\" to id of window 1")))
-		  (external-program:run "osascript" 
-				   `("-e" ,tmp) :output out)))))
-   tmp0))
-
-(defun shot-local ()
-  "screenshot from quicktime player, save to *shot-path*"
-  (let ((winid (format nil "-l~a" (que-winid-qt))))
-		       (external-program:run "screencapture"
-					`(,winid "-o" ,(namestring *shot-path*)) :output t)))
-
-(defun guck-local ()
-  "shot-local y m-m/revert-buffer shot.png"
-  (progn (shot-local)
-	 (m-m/revert-buffer (file-namestring *shot-path*))))
-
-(defun shot-read ()
-  (declare (optimize (speed 3) (safety 0)))
-  (setf *shot-img* (opticl:read-png-file *shot-path*))
-  '*shot-img*)
-
-;; (declaim (type opticl:8-bit-rgb-image *shot-img*)) ; TODO
-
-(defun que-shot-size ()
-  "que ist die width y height of shot-img"
-  (opticl:with-image-bounds (height width)  *shot-img*
-    (list height width)))
-
-(defun que-shot-ratio ()
-  (let ((tmp (que-shot-size)))
-    (/ (car tmp) (cadr tmp) 1.0)))
-
-(defun guck-read-que-local ()
-  (progn (guck-local)
-	 (shot-read)
-	 (que-shot-size)))
-
-(defvar *el-path* (merge-pathnames "machine-mearning-mode.el" *working-dir*))
+ (defvar *el-path* (merge-pathnames "machine-mearning-mode.el" *working-dir*))
 (swank:eval-in-emacs `(load ,(namestring *el-path*)))
 
 (defun licht- ()
@@ -232,7 +192,6 @@
 
 (defun licht+ ()
   (cmd "activator send libactivator.screen.brightness.increase"))
-
 
 (defun red-msg (msg color)
   "Insert red color msg at the end of buffer in the buffer qt-wrapper"
@@ -243,7 +202,7 @@
 	(insert (propertize ,msg 'font-lock-face '(:foreground ,color)))))))
 
 (defun halbe (etwas-lst)
-  "alle ele in list mit ratio"
+  "alle ele in list mit ratio, eigentlich nicht half machen, deswegen halbe"
   (mapcar (lambda (x) (* x *ratio*)) etwas-lst))
 
 (defun drag-passiert (lst)
@@ -275,5 +234,4 @@
   (let* ((poen-cons (nimm-mouse-pos))
 	 (poen-lst (list (car poen-cons) (cdr poen-cons))))
     (poen-conv poen-lst)))
-
 

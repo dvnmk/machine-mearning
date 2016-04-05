@@ -81,16 +81,14 @@
 	 (cmd (format "(click-passiert '%s)" lst)))
     (2slime cmd)))
 
+(defun recording-start ()
+  (interactive)
+  (message "recording-start"))
 
-;; (define-key global-map [down-mouse-1] 'mouse-drag-region)
-;; (global-set-key [mouse-1]	'mouse-set-point)
-;; (global-set-key [drag-mouse-1]	'mouse-set-region)
+(defun recording-end ()
+  (interactive)
+  (message "recording-end"))
 
-
-
-;; (add-hook 'org-agenda-finalize-hook
-;;       (lambda () (remove-text-properties
-;;          (point-min) (point-max) '(mouse-face t)))) 
 
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
@@ -103,7 +101,11 @@
             (define-key map (kbd "C-c C-c") #'foo)
             ;; (define-key map [down-mouse-1] 'nil)
 	    ;; (define-key map [drag-mouse-1 'nil])
-	    map)  )
+	    
+	    (define-key map (kbd "s") #'recording-start)
+	    (define-key map (kbd "e") #'recording-stop)
+	    
+	    map))
 
 (provide 'machine-mearning-mode)
 

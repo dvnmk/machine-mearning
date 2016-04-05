@@ -20,6 +20,8 @@
 (defparameter *remote-file*
   "mobile@localhost:/var/mobile/Media/DCIM/100APPLE/shot.png")
 
+;; TODO (declaim)
+;; (declaim (type opticl:8-bit-rgb-image *shot-img*)) ; TODO
 (defparameter *shot-img* nil)
 
 
@@ -44,13 +46,28 @@
     (shot-symlink)
     (sleep 0.1)
     (shot-down)
-    ;; (setf *shot-img* (opticl:read-png-file *shot-path*))
+    ;; (setf *shot-img* (opticl:read-png-file *shot-path*)) ; zusammen in (progn) ist slow, als getrennt.
     '*shot-img*
     ;; (typecase *shot-img*
     ;;   (opticl:8-bit-rgb-image
     ;;    (locally  
     ;; 	   (declare (type opticl:8-bit-rgb-image *shot-img*)))))
     ))
+
+(defun shot-read ()
+  (declare (optimize (speed 3) (safety 0)))
+  (setf *shot-img* (opticl:read-png-file *shot-path*))
+  '*shot-img*)
+
+
+(defun que-shot-size ()
+  "que ist die width y height of shot-img"
+  (opticl:with-image-bounds (height width)  *shot-img*
+    (list height width)))
+
+(defun que-shot-ratio ()
+  (let ((tmp (que-shot-size)))
+    (/ (car tmp) (cadr tmp) 1.0)))
 
 (defun shot-resize-imagick ()
   (external-program:run "convert"

@@ -1,4 +1,17 @@
 ;; key.lisp keyboard reader
+(in-package #:machine-mearning)
+
+(defun iter-box ()
+    (let ((x0 80)
+       (y0 806)
+       (dx 159)
+       (dy 94)
+       (x-times 3)
+       (y-times 3))
+   (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
+	 (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
+			(collect (list x y)))))))
+
 (defun mach-numpad ()
   "normal no security pad , (nil nil ok 1 2 3 4 5 6 7 8 nil 0 backspace)"
   (let ((x0 99)
@@ -11,7 +24,7 @@
 	  (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
 			 (collect (list x y)))))))
 
-(defparameter *numpad-xy-map* (mach-num-pad))
+(defparameter *numpad-xy-map* (mach-numpad))
 
 (defun wozu-nth-btn-numpad (x)
   (let ((row-0 (nth 0 *num-pad-xy-map*))
@@ -67,16 +80,18 @@
 	(dx 159)
 	(dy 94)
 	(x-times 3)
-	(y-times 3)
-	(rgb (list 0 0 0))
+	(y-times 2)
 	(dx-boxy 10)
 	(dy-boxy 10)
-	)
+	(qux (list 0 0 0)))
     (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
 	  (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
-			 (if (> (count-rgb-pixel rgb `(,x ,y ,dx-boxy ,dy-boxy))
+			 (if (> (count-rgb-pixel qux `(,x ,y ,dx-boxy ,dy-boxy))
 				0)
-			   (collect (list x y))))))))
+			     (collect (list x y))))
+	    into r at beginning)
+	  (finally (progn (push '((239 1088) (557 1088)) r)
+			  (return (nreverse r)))))))
 
 
 (defparameter *loch-gefunden-xy-map* nil)
@@ -103,11 +118,15 @@
   (let* ((row-0 (nth 0 *loch-gefunden-xy-map*))
 	 (row-1 (nth 1 *loch-gefunden-xy-map*))
 	 (row-2 (nth 2 *loch-gefunden-xy-map*))
+	 (row-3 (nth 3 *loch-gefunden-xy-map*))
 	 (len-0 (length row-0))
-	 (len-1 (length row-1)))
+	 (len-1 (length row-1))
+	 (len-2 (length row-2))
+)
     (cond ((< x len-0)			(nth x row-0))
 	  ((< x #1=(+ len-0 len-1))	(nth (- x len-0) row-1))
-	  (t				(nth (- x #1#) row-2)))))
+	  ((< x #2=(+ #1# len-2))	(nth (- x #1#) row-2))
+	  (t				(nth (- x #2#) row-3)))))
 
 ;; ^ shift 
 ;; !! backspace 
@@ -116,7 +135,8 @@
 ;; #### spacebar
 ;; //// return
 (defparameter *citi-key-seq* "1234567890qwertyuiopasdfghjkl^zxcvbnm!!$$@@####////")
-(defparameter *secupad-key-seq* "1234567890!!//")
+
+(defparameter *secupad-key-seq* "1234567890!/")
 
 (defun touch-diese-char-citi (char-x)
   (let* ((ori-xy (wozu-nth-btn-citi (position char-x *citi-key-seq*)))
