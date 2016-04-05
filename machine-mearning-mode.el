@@ -11,7 +11,7 @@
 ;; This file is NOT a part of GNU Emacs.
 
 ;;; License:
-;; You can redistribute this program and/or modify it under the terms of the GNU General Public License version 2.
+;; TODO
 
 ;;; Commentary:
 
@@ -81,13 +81,20 @@
 	 (cmd (format "(click-passiert '%s)" lst)))
     (2slime cmd)))
 
-(defun recording-start ()
+(defun record-start ()
   (interactive)
-  (message "recording-start"))
+  (let ((cmd (format "(record-start)")))
+    (2slime cmd)))
 
-(defun recording-end ()
+(defun record-stop ()
   (interactive)
-  (message "recording-end"))
+  (let ((cmd (format "(record-stop)")))
+    (2slime cmd)))
+
+(defun record-reset ()
+  (interactive)
+  (let ((cmd (format "(record-reset)")))
+    (2slime cmd)))
 
 
 ;;;###autoload
@@ -102,8 +109,9 @@
             ;; (define-key map [down-mouse-1] 'nil)
 	    ;; (define-key map [drag-mouse-1 'nil])
 	    
-	    (define-key map (kbd "s") #'recording-start)
-	    (define-key map (kbd "e") #'recording-stop)
+	    (define-key map (kbd "1") #'record-start)
+	    (define-key map (kbd "0") #'record-stop)
+	    (define-key map (kbd "9") #'record-reset)
 	    
 	    map))
 

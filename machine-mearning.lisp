@@ -208,16 +208,18 @@
 (defun drag-passiert (lst)
   (let ((msg (format nil "~A" (halbe lst)))
 	(converted-poen-lst (halbe lst)))
-    (progn (swipe converted-poen-lst)
-	   (red-msg msg "violet") ; debug
-	   (swank:eval-in-emacs 
-	    `(message "DRAG-passiert: %s" ,msg)))))
+    (progn  (if *record-status* (push converted-poen-lst *record-kiste*))
+	    (red-msg msg "violet") ; debug
+	    (swank:eval-in-emacs 
+	     `(message "DRAG-passiert: %s" ,msg)))))
 
 
-(defun click-passiert (lst)
-  (let ((msg (format nil "~A" lst)) ;; nur poen halbe, ohne timestamp
-	 (poen-conv (list (* (car lst) *ratio*) (* (cadr lst) *ratio*))))
-    (progn (touch poen-conv)
+(defun  click-passiert (lst)
+  (let ((msg (format nil "~A" lst)) ;; nur poen halbe, /m timestamp
+	(poen-conv (list (* (car lst) *ratio*) ; x
+			 (* (cadr lst) *ratio*) ; y
+			 (caddr lst)))) ; ts
+    (progn (if *record-status* (push  poen-conv *record-kiste*))
 	   (red-msg msg "red") ; debug
 	   (swank:eval-in-emacs
 	    `(message "CLICK-passiert: %s retina" ,msg )))))
@@ -234,4 +236,25 @@
   (let* ((poen-cons (nimm-mouse-pos))
 	 (poen-lst (list (car poen-cons) (cdr poen-cons))))
     (poen-conv poen-lst)))
+
+;; record
+(defparameter *record-kiste* nil)
+(defparameter *record-status* nil)
+
+(defun record-start ()
+       (progn (setf *record-status* t)
+	      (swank:eval-in-emacs
+	       '(message "RECORD-START-gt"))))
+
+(defun record-stop ()
+       (progn (setf *record-status* nil)
+	      (swank:eval-in-emacs
+	       '(message "RECORD-STOP-gt"))))
+
+(defun record-reset ()
+  (progn (setf *record-kiste* nil)
+	 (swank:eval-in-emacs
+	  '(message "*record-kiste* LEER-gt"))))
+
+;; *record-kiste* to fun converter
 

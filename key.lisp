@@ -172,18 +172,17 @@
 	 (row-1 (list 64 874 64 1 8 0))
 	 (row-2 (list 61 989 54 1 8 0))
 	 (row-3 (list 35 1100 61 1 8 0))
-	 (xy-0 (eval `(iter-box ,@row-0)))
-	 (xy-1 (eval `(iter-box ,@row-1)))
-	 (xy-2 (eval `(iter-box ,@row-2)))
-	 (xy-3 (eval `(iter-box ,@row-3)))
-	 )
+	 (xy-0 (apply #'iter-box row-0))
+	 (xy-1 (apply #'iter-box row-1))
+	 (xy-2 (apply #'iter-box row-2))
+	 (xy-3 (apply #'iter-box row-3)))
     (append xy-0 xy-1 xy-2 xy-3)))
 
 (defparameter *enkey-xy-map* (mach-enkey))
 
 ;; TODO kali  m/ lezte row
-;; ^ shift, ! bs $ num @ kbd # spc / ok
-(defparameter *enkey-seq* "qweertyuiopasdfghjkl^zxcvbnm!$@#/")
+;; ^ shift, ! bs $ num @ kbd #\spaceko spc / ok
+(defparameter *enkey-seq* "qweertyuiopasdfghjkl^zxcvbnm!$@ /")
 
 (defun wozu-nth-btn-enkey (x)
   "nth btn => position (x y)"
@@ -204,7 +203,7 @@
   (let* ((ori-xy (wozu-nth-btn-enkey (position char-x *enkey-seq*)))
 	 (tar-xy (halbe ori-xy)))
     ;; (princ ori-xy)
-    (touch tar-xy)))
+    (princ tar-xy)))
 
 (defun type-string-enkey (string-x)
   (mapcar #'touch-diese-char-enkey (coerce string-x 'list)))
