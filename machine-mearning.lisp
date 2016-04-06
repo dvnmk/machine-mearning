@@ -40,6 +40,14 @@
     (cmd cmd)
     lst))
 
+(defun stouch (lst)
+  "touch y swipe warp"
+  (if (> (length lst) 4)
+      (swipe lst)
+      (touch lst)))
+
+
+
 (defun zzz ()
   "Push the sleep button on iphone"
   (cmd "activator send libactivator.system.sleepbutton"))
@@ -191,42 +199,20 @@
 (defun licht+ ()
   (cmd "activator send libactivator.screen.brightness.increase"))
 
-(defun red-msg (msg color)
-  "Insert red color msg at the end of buffer in the buffer qt-wrapper"
+(defun insert-log-emacs (msg color)
+  "Insert x color msg at the end of buffer in the buffer qt-wrapper"
   (let ((wo (file-namestring *qt-wrapper-path*)))
     (swank::eval-in-emacs
      `(with-current-buffer ,wo
 	(end-of-buffer)
-	(insert (propertize ,msg 'font-lock-face '(:foreground ,color)))))))
+	(insert (propertize ,msg 'font-lock-face '(:foreground ,color)))
+	(newline)
+	(end-of-buffer)))))
 
 (defun halbe (etwas-lst)
   "alle ele in list mit ratio, eigentlich nicht half machen, deswegen halbe"
   (mapcar (lambda (x) (* x *ratio*)) etwas-lst))
 
-(defun drag-passiert (lst)
-  (let* ((convrted-poen-lst (list (* (nth 0 lst) *ratio*)
-			      (* (nth 1 lst) *ratio*)
-			      (* (nth 2 lst) *ratio*)
-			      (* (nth 3 lst) *ratio*)
-			      (nth 4 lst)))
-	 (msg (format nil "~A" convrted-poen-lst)))
-    (progn  (if *record-status* (push convrted-poen-lst *record-kiste*))
-	    ;; (swipe convrted-poen-lst)
-	    (red-msg msg "darkcyan") ; debug
-	    (swank:eval-in-emacs 
-	     `(message "DRAG-passiert: %s" ,msg)))))
-
-
-(defun  click-passiert (lst)
-  (let* ((convrted-poen-lst (list (* (car lst) *ratio*) ; x
-			 (* (cadr lst) *ratio*) ; y
-			 (caddr lst)))
-	 (msg (format nil "~A" convrted-poen-lst)))			; ts
-    (progn (if *record-status* (push  convrted-poen-lst *record-kiste*))
-	   ;; (touch convrted-poen-lst) ; soll ohne ts
-	   (red-msg msg "black")	; debug
-	   (swank:eval-in-emacs
-	    `(message "CLICK-passiert: %s" ,msg )))))
 
 (defun poen-conv (lst)
   "retina poen position -> normal resolution fuer touch cmd"
@@ -260,7 +246,69 @@
 	 (swank:eval-in-emacs
 	  '(message "*record-kiste* LEER-gt"))))
 
+(defun drag-passiert (lst)
+  (let* ((ts-start (nth 0 lst))
+	 (ts-end (nth 1 lst))
+	 (ts-delta (/ (- ts-end ts-start) 1000.0))
+	 (convrted-poen-lst (list  ts-start
+				   ts-end
+				   (* (nth 2 lst) *ratio*)
+				   (* (nth 3 lst) *ratio*)
+				   (* (nth 4 lst) *ratio*)
+				   (* (nth 5 lst) *ratio*)
+				   ts-delta
+				   ))
+	 (msg (format nil "~A" convrted-poen-lst)))
+    (progn  (if *record-status* (push convrted-poen-lst *record-kiste*))
+	    ;; (swipe convrted-poen-lst)
+	    (insert-log-emacs msg "darkcyan") ; debug
+	    (swank:eval-in-emacs 
+	     `(message "DRAG-passiert: %s" ,msg)))))
+
+
+(defun  click-passiert (lst)
+  (let* ((convrted-poen-lst (list (nth 0 lst)
+				  (nth 1 lst)
+				  (* (nth 2 lst) *ratio*) ; x
+				  (* (nth 3 lst) *ratio*) ; y
+				 ))
+	 (msg (format nil "~A" convrted-poen-lst)))			; ts
+    (progn (if *record-status* (push  convrted-poen-lst *record-kiste*))
+	   ;; (touch convrted-poen-lst) ; soll ohne ts
+	   (insert-log-emacs msg "black")	; debug
+	   (swank:eval-in-emacs
+	    `(message "CLICK-passiert: %s" ,msg )))))
+
+
+
+
 ;; *record-kiste* to fun converter
 ;; cond el in list ist 4 length, ist es ein swipe so, einfach (swipe)
 ;; wenn es 3, dann ist es ein touch. denk mal dran dit timestampe
 
+(defparameter *fun-kiste* nil)
+(defparameter *old-end* 0)
+
+(defun fun-kiste-reset ()
+  (setf *fun-kiste* nil
+	*old-end* nil))
+
+(defun mach-fun (lst-ele)
+  (let* ((start (car lst-ele))
+	 (end (cadr lst-ele ))
+	 (zwsn (if *old-end*
+		   (/ (- start *old-end*) 1000.0)
+		   0)))
+    (setf *old-end* end)
+    (progn  (push `(progn (sleep ,zwsn)
+			  (stouch ,(cddr lst-ele))) *fun-kiste*))))
+
+(defun mach-fun-seq ()
+  (progn (fun-kiste-reset)
+	 (dolist (el *record-kiste* *fun-kiste*)
+	   (mach-fun el))))
+
+(defun mach-fun-seq ()
+  (progn (fun-kiste-reset)
+	 (mapcar #'mach-fun (reverse *record-kiste*))
+	 (reverse *fun-kiste*)))
