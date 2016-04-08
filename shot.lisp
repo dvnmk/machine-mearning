@@ -81,24 +81,6 @@
     (declare (type opticl:8-bit-rgb-image img))
     (opticl:write-png-file *shot-resize-path*  img)))
 
-(defun shot-read ()
-  (declare (optimize (speed 3) (safety 0)))
-  (setf *shot-img* (opticl:read-png-file *shot-path*))
-  '*shot-img*)
-
-;; (defparameter *shot-img* )
-;; (setf *shot-img* (opticl:rea d-png-file *shot-path*))
-
-;; (declaim (type opticl:8-bit-rgb-image *shot-img*)) ; TODO
-
-(defun que-shot-size ()
-  "que ist die width y height of shot-img"
-  (opticl:with-image-bounds (height width)  *shot-img*
-    (list height width)))
-
-(defun que-shot-ratio ()
-  (let ((tmp (que-shot-size)))
-    (/ (car tmp) (cadr tmp) 1.0)))
 
 ;; boxy scanner
 

@@ -86,8 +86,11 @@
 
 (defun record-start ()
   (interactive)
-  (let ((cmd (format "(record-start)")))
-    (2slime cmd)))
+  (let ((status (2slime "*record-status*")))
+    (if status
+	(2slime "(record-start)")
+      (2slime "(record-stop)"))))
+
 
 (defun record-stop ()
   (interactive)
@@ -99,6 +102,10 @@
   (let ((cmd (format "(record-reset)")))
     (2slime cmd)))
 
+(defun mach-mal ()
+  (interactive)
+  (let ((cmd (format "(mach-mal)")))
+    (2slime cmd)))
 
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
@@ -115,8 +122,9 @@
 	    ;; (define-key map [drag-mouse-1 'nil])
 	    
 	    (define-key map (kbd "1") #'record-start)
-	    (define-key map (kbd "0") #'record-stop)
-	    (define-key map (kbd "9") #'record-reset)
+	    (define-key map (kbd "2") #'record-stop)
+	    (define-key map (kbd "3") #'mach-mal)
+	    (define-key map (kbd "4") #'record-reset)
 	    
 	    map))
 

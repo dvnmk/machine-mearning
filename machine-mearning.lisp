@@ -72,6 +72,11 @@
   "Open the auction app"
   (cmd "activator send kr.co.auction.AuctionBrowser"))
 
+(defun sketchbook ()
+  (cmd "activator send com.autodesk.ios.SketchBookPro3"))
+
+
+
 ;; (cmd "activator current-mode")
 
 ;; (cmd "activator current-app")
@@ -80,7 +85,7 @@
   (cmd "activator send libactivator.system.take-screenshot"))
 
 
-(defun m-m/revert-buffer (buf)
+(defun shot-revert-buffer (buf)
   (let ((tar-buf-path (namestring (merge-pathnames "shot.png" *working-dir*))))
     (swank:eval-in-emacs
      `(let ((tar-buf (get-buffer ,buf)))
@@ -111,7 +116,8 @@
    `(defun setup-wins ()
       (setq window-resize-pixelwise t)
       (setq fit-window-to-buffer-horizontally t)
-      (progn (split-window-right)
+      (progn (delete-other-windwos)
+	     (split-window-right)
 	     (other-window 1)
 	     (find-file ,qt-filename)
 	     (find-file ,shot-filename)
@@ -124,6 +130,7 @@
 (defun init ()
   (setq *qt-wrapper-left* (swank:eval-in-emacs '(setup-wins)))
   (format t "*QT-WRAPPER-LEFT*: ~d, DEM NACHST, KALIBRATION M/ QUICKTIME PLAYER" *qt-wrapper-left*)
+  (qt-run)
   *qt-wrapper-left*)
 
 (defun fit-again ()
@@ -135,7 +142,7 @@
 (defun guck ()
   "wifi ssh ver. <-> (guck-local)"
   (progn (shot-sym-down) 
-	 (m-m/revert-buffer "shot.png")
+	 (shot-revert-buffer "shot.png")
 	 ;; (shot-resize-opticl)
 	 ;; (sleep 0.2)
 	 ;; (revert-buffer "shot-resize.png")
@@ -145,7 +152,6 @@
 (defparameter *fringe-width* (swank:eval-in-emacs
 			      '(car (window-fringes))))
 
-;; entscheiden (x y), (y x), (x . y), od. (y . x) TODO
 (defparameter *last-druck-point* '(0 0))
 
 (defparameter *ratio* 0.5)
@@ -176,8 +182,7 @@
   (progn (druck)
 	 (sleep 2)
 	 (guck)
-	 *last-druck-point*
-	 ))
+	 *last-druck-point*))
 
 (defun qt-run ()
   "venga quicktime player fue die iphone screen sharing"
@@ -190,7 +195,7 @@
 		     '("QuickTime Player")
 		     :output out)))
  
- (defvar *el-path* (merge-pathnames "machine-mearning-mode.el" *working-dir*))
+(defvar *el-path* (merge-pathnames "machine-mearning-mode.el" *working-dir*))
 (swank:eval-in-emacs `(load ,(namestring *el-path*)))
 
 (defun licht- ()
@@ -202,7 +207,7 @@
 (defun insert-log-emacs (msg color)
   "Insert x color msg at the end of buffer in the buffer qt-wrapper"
   (let ((wo (file-namestring *qt-wrapper-path*)))
-    (swank::eval-in-emacs
+    (swank:eval-in-emacs
      `(with-current-buffer ,wo
 	(end-of-buffer)
 	(insert (propertize ,msg 'font-lock-face '(:foreground ,color)))
@@ -228,6 +233,8 @@
     (poen-conv poen-lst)))
 
 ;; record
+;; from emacs buffer kommt die datei hinzu *record-kiste*
+
 (defparameter *record-kiste* nil)
 (defparameter *record-status* nil)
 
@@ -239,7 +246,8 @@
 (defun record-stop ()
        (progn (setf *record-status* nil)
 	      (swank:eval-in-emacs
-	       '(message "RECORD-STOP-gt"))))
+	       '(message "RECORD-STOP-gt"))
+	      (mach-fun-kiste-seq)))
 
 (defun record-reset ()
   (progn (setf *record-kiste* nil)
@@ -247,44 +255,47 @@
 	  '(message "*record-kiste* LEER-gt"))))
 
 (defun drag-passiert (lst)
-  (let* ((ts-start (nth 0 lst))
-	 (ts-end (nth 1 lst))
-	 (ts-delta (/ (- ts-end ts-start) 1000.0))
-	 (convrted-poen-lst (list  ts-start
-				   ts-end
-				   (* (nth 2 lst) *ratio*)
-				   (* (nth 3 lst) *ratio*)
-				   (* (nth 4 lst) *ratio*)
-				   (* (nth 5 lst) *ratio*)
-				   ts-delta
-				   ))
-	 (msg (format nil "~A" convrted-poen-lst)))
-    (progn  (if *record-status* (push convrted-poen-lst *record-kiste*))
-	    ;; (swipe convrted-poen-lst)
+  (let* ((start (nth 0 lst))
+	 (end (nth 1 lst))
+	 (delta (/ (- end start) 1000.0))
+	 (convrted-poen (list  start
+			       end
+			       (* (nth 2 lst) *ratio*)
+			       (* (nth 3 lst) *ratio*)
+			       (* (nth 4 lst) *ratio*)
+			       (* (nth 5 lst) *ratio*)
+			       delta
+			       ))
+	 (msg (format nil "~A" convrted-poen)))
+    (progn  (if *record-status* (progn
+				  (push convrted-poen *record-kiste*)
+				  (setf msg (concatenate 'string
+							 msg
+							 " <REC>"))))
+	    (swipe (cddr convrted-poen))
 	    (insert-log-emacs msg "darkcyan") ; debug
 	    (swank:eval-in-emacs 
-	     `(message "DRAG-passiert: %s" ,msg)))))
+	     `(message "DRAG-passiert: %s " ,msg)))))
 
 
 (defun  click-passiert (lst)
+  "(ts ts x y)"
   (let* ((convrted-poen-lst (list (nth 0 lst)
 				  (nth 1 lst)
-				  (* (nth 2 lst) *ratio*) ; x
-				  (* (nth 3 lst) *ratio*) ; y
-				 ))
+				  (* (nth 2 lst) *ratio*) 
+				  (* (nth 3 lst) *ratio*)))
 	 (msg (format nil "~A" convrted-poen-lst)))			; ts
-    (progn (if *record-status* (push  convrted-poen-lst *record-kiste*))
-	   ;; (touch convrted-poen-lst) ; soll ohne ts
+    (progn (if *record-status* (progn (push  convrted-poen-lst *record-kiste*)
+				      (setf msg (concatenate 'string
+							 msg
+							 " <REC>"))))
+	   (stouch (cddr convrted-poen-lst))	
 	   (insert-log-emacs msg "black")	; debug
 	   (swank:eval-in-emacs
 	    `(message "CLICK-passiert: %s" ,msg )))))
 
 
-
-
-;; *record-kiste* to fun converter
-;; cond el in list ist 4 length, ist es ein swipe so, einfach (swipe)
-;; wenn es 3, dann ist es ein touch. denk mal dran dit timestampe
+;; *record-kiste* zu *fun-kiste* conversion
 
 (defparameter *fun-kiste* nil)
 (defparameter *old-end* 0)
@@ -293,22 +304,53 @@
   (setf *fun-kiste* nil
 	*old-end* nil))
 
-(defun mach-fun (lst-ele)
+(defun mach-fun-kiste (lst-ele)
   (let* ((start (car lst-ele))
 	 (end (cadr lst-ele ))
-	 (zwsn (if *old-end*
-		   (/ (- start *old-end*) 1000.0)
+	 (zwsn (if *old-end* (/ (- start *old-end*) 1000.0)
 		   0)))
     (setf *old-end* end)
     (progn  (push `(progn (sleep ,zwsn)
-			  (stouch ,(cddr lst-ele))) *fun-kiste*))))
+			  (stouch (list ,@(cddr lst-ele))))
+		  *fun-kiste*))))
 
-(defun mach-fun-seq ()
+(defun mach-fun-kiste-seq ()
   (progn (fun-kiste-reset)
-	 (dolist (el *record-kiste* *fun-kiste*)
-	   (mach-fun el))))
+	 (mapcar #'mach-fun-kiste (reverse *record-kiste*))
+	 *fun-kiste*))
 
-(defun mach-fun-seq ()
-  (progn (fun-kiste-reset)
-	 (mapcar #'mach-fun (reverse *record-kiste*))
-	 (reverse *fun-kiste*)))
+(defun mach-mal ()
+  (progn (swank:eval-in-emacs
+	  '(message "mach-mal"))
+	 (mapcar #'eval (reverse *fun-kiste*)))  )
+
+;; *fun-kiste* manipulation
+;; (PROGN (SLEEP 999) (STOUCH (LIST 64.5 323.5 151.5 312.5 999)))
+(defun sleep-kontrol-ele (ele fun-x by-x)
+  "(SLEEP 999) manipulate the 999 via fun-x by by-x"
+  (setf #1=(nth 1 (nth 1 ele)) (funcall fun-x #1# by-x)))
+
+(defun sleep-kontrol-seq (fun-x by-x) 
+  (mapcar (lambda(ele)(sleep-kontrol-ele ele fun-x by-x)) *fun-kiste*))
+
+
+(defun drag-kontrol-ele (ele fun-x by-x)
+  "(LIST 0 0 0 0 999) manipulate the 999 via fun-x by by-x"
+  (if #1=(nth 5 (nth 1(nth 2 ele)))
+      (setf #1# (funcall fun-x #1# by-x))))
+
+(defun drag-kontrol-seq (fun-x by-x)
+  (mapcar (lambda (ele) (drag-kontrol-ele ele fun-x by-x)) *fun-kiste*))
+
+;; save fun
+(defun save-kiste (filename)
+  (with-open-file (out filename
+                   :direction :output
+                   :if-exists :supersede)
+    (with-standard-io-syntax
+      (print *fun-kiste* out))))
+
+(defun load-kiste (filename)
+  (with-open-file (in filename)
+    (with-standard-io-syntax
+      (setf *fun-kiste* (read in)))))

@@ -1,3 +1,16 @@
+fun-kiste als datei save in lisp file as txt format
+hinzufuegen, stream
+
+(defmacro save-fun-kiste (save-name)
+       `(defparameter ,(intern (format nil "*~A*" ,save-name))
+	  ',*fun-kiste*)) 
+
+(defparameter *alle-weg*
+  '((progn (sleep ......))
+    (progn (...)))
+  
+    
+
 * image scanner
 ** (foo img start-poen end-poen)
 ** citibank
