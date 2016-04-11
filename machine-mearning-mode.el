@@ -84,18 +84,14 @@
 	 (cmd (format "(click-passiert '%s)" lst)))
     (2slime cmd)))
 
-(defun record-start ()
+(defun record-start-tgl ()
   (interactive)
   (let ((status (2slime "*record-status*")))
-    (if status
+    (if (equalp status "NIL"
+		)
 	(2slime "(record-start)")
       (2slime "(record-stop)"))))
 
-
-(defun record-stop ()
-  (interactive)
-  (let ((cmd (format "(record-stop)")))
-    (2slime cmd)))
 
 (defun record-reset ()
   (interactive)
@@ -105,6 +101,13 @@
 (defun mach-mal ()
   (interactive)
   (let ((cmd (format "(mach-mal)")))
+    (2slime cmd)))
+(let ((cmd (format "(fun-kiste-save '%s)" "warum")))
+    (2slime cmd)) 
+
+(defun fun-kiste-save (kiste-name)
+  (interactive "s:kiste-name: ")
+  (let ((cmd (format "(fun-kiste-save '%s)" kiste-name)))
     (2slime cmd)))
 
 ;;;###autoload
@@ -121,8 +124,8 @@
             ;; (define-key map [down-mouse-1] 'nil)
 	    ;; (define-key map [drag-mouse-1 'nil])
 	    
-	    (define-key map (kbd "1") #'record-start)
-	    (define-key map (kbd "2") #'record-stop)
+	    (define-key map (kbd "1") #'record-start-tgl)
+	    (define-key map (kbd "2") #'fun-kiste-save)
 	    (define-key map (kbd "3") #'mach-mal)
 	    (define-key map (kbd "4") #'record-reset)
 	    

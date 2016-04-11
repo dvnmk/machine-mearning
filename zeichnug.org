@@ -1,6 +1,3 @@
-fun-kiste als datei save in lisp file as txt format
-hinzufuegen, stream
-
 (defmacro save-fun-kiste (save-name)
        `(defparameter ,(intern (format nil "*~A*" ,save-name))
 	  ',*fun-kiste*)) 
@@ -20,17 +17,27 @@ hinzufuegen, stream
 ** (postion #\a fmap) => 20
 ** (wo 20) => (x y)
 
-
 * ZU MACHEN
 ** DONE touch point kalibration
 ** DONE pixel-position via cons od. list
 ** DONE swipe
 ** TODO ACTIVATOR MACRO
-** TODO -mode.el richtig hinzufuegen 
 ** TODO record system
+*** DONE -mode.el ; argutment
+*** DONE ohne record stop, fun-kiste-save od set, gebraucht?
+*** TODO defparameter, whnn die symbol interned schon, dann braucht be called setf od. egal mit defparameter
+*** TODO feedback to Emacs
+*** 
+** DONE dafuer braucht, bevor call (fun-kiste-symbol) (mach-fun-kiste-seq)
+*** fun-kiste -> make-fun-w/-name -> ("kiste-name" (progn ....))
 ** TODO opticl
 ** TODO keyboard zu swipe, pgdn/pgup
 ** TODO in qt-wrapper disable the mark set feature
+** DONE mode.el record-start -> toggle
+
+** DONE fun-kiste als datei save in lisp file as txt format
+hinzufuegen, stream
+
 
 * HISTORY
 ** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man xs

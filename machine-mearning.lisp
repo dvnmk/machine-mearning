@@ -116,7 +116,7 @@
    `(defun setup-wins ()
       (setq window-resize-pixelwise t)
       (setq fit-window-to-buffer-horizontally t)
-      (progn (delete-other-windwos)
+      (progn (delete-other-windows)
 	     (split-window-right)
 	     (other-window 1)
 	     (find-file ,qt-filename)
@@ -241,18 +241,18 @@
 (defun record-start ()
        (progn (setf *record-status* t)
 	      (swank:eval-in-emacs
-	       '(message "RECORD-START-gt"))))
+	       '(message "RECORD-START"))))
 
 (defun record-stop ()
        (progn (setf *record-status* nil)
 	      (swank:eval-in-emacs
-	       '(message "RECORD-STOP-gt"))
+	       '(message "RECORD-STOP"))
 	      (mach-fun-kiste-seq)))
 
 (defun record-reset ()
   (progn (setf *record-kiste* nil)
 	 (swank:eval-in-emacs
-	  '(message "*record-kiste* LEER-gt"))))
+	  '(message "*record-kiste* LEER"))))
 
 (defun drag-passiert (lst)
   (let* ((start (nth 0 lst))
@@ -342,15 +342,25 @@
 (defun drag-kontrol-seq (fun-x by-x)
   (mapcar (lambda (ele) (drag-kontrol-ele ele fun-x by-x)) *fun-kiste*))
 
-;; save fun
-(defun save-kiste (filename)
-  (with-open-file (out filename
-                   :direction :output
-                   :if-exists :supersede)
-    (with-standard-io-syntax
-      (print *fun-kiste* out))))
+;;; save fun
 
-(defun load-kiste (filename)
-  (with-open-file (in filename)
-    (with-standard-io-syntax
-      (setf *fun-kiste* (read in)))))
+(defun fun-kiste-symbol (name)
+  "record-stop no need. during recording kann save."
+  (progn (mach-fun-kiste-seq)
+	 `(defparameter ,name ',(copy-list *fun-kiste*))))
+
+(defun fun-kiste-set (name)
+  "from current record-kiste defparameter, fuer saved kiste zu set, einfach (load *fun-kiste-path*) "
+  (eval (fun-kiste-symbol name)))
+
+(defparameter *fun-kiste-save-path*
+  (merge-pathnames "fun-kiste-save.lisp" *working-dir*))
+
+(defun fun-kiste-save (kiste)
+  (let ((res (fun-kiste-symbol kiste)))
+    (progn (with-open-file (out *fun-kiste-save-path* :direction :output :if-exists :append)
+	     (print res out))
+	   (swank:eval-in-emacs
+	    `(message "FUN-KISTE-SAVE %s" ,(symbol-name kiste))))))
+
+;; (format nil "(defparameter ~a ~a)" (symbol-name 'foo-2) foo-2)
