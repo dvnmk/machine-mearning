@@ -64,3 +64,50 @@
    (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
 	 (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
 			(collect (list x y)))))))
+
+;; Emacs mouse bezueglich
+(defun mouse-start-rectangle (start-event)
+  (interactive "e")
+  (deactivate-mark)
+  (mouse-set-point start-event)
+  (rectangle-mark-mode +1)
+  (let ((drag-event))
+    (track-mouse
+      (while (progn
+               (setq drag-event (read-event))
+               (mouse-movement-p drag-event))
+        (mouse-set-point drag-event)))))
+
+(global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)
+
+
+(defun mouse-start-rectangle (start-event)                        
+  (interactive "e")                                               
+  (deactivate-mark)                                               
+  (mouse-set-point start-event)                                   
+  ;; (rectangle-mark-mode +1)
+  (message "%s" (mouse-pixel-position))
+
+  (let ((drag-event))                                             
+    (track-mouse                                                  
+      (while (progn                                               
+	       (setq drag-event (read-event))                     
+	       (mouse-movement-p drag-event))                     
+	(mouse-set-point drag-event)
+	(message "%s" (mouse-pixel-position))))))
+
+
+
+(defun mouse-start-rectangle (start-event)
+  (interactive "e")
+  (deactivate-mark)
+  (mouse-set-point start-event)
+  (rectangle-mark-mode +1)
+  (let ((drag-event))
+    (track-mouse
+      (while (progn
+               (setq drag-event (read-event))
+               (mouse-movement-p drag-event))
+        (mouse-set-point drag-event)))))
+
+(global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)

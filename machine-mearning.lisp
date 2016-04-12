@@ -93,8 +93,8 @@
 		      (revert-buffer t t))
 	    (find-file ,tar-buf-path)))   )))
 
-
-(defparameter *qt-wrapper-path* (merge-pathnames "qt-wrapper" *working-dir*))
+;; DONE defvar? 
+(defvar *qt-wrapper-path* (merge-pathnames "qt-wrapper" *working-dir*))
 
 ;;
 (let ((shot-filename (file-namestring *shot-path*)))
@@ -239,20 +239,27 @@
 (defparameter *record-status* nil)
 
 (defun record-start ()
-       (progn (setf *record-status* t)
-	      (swank:eval-in-emacs
-	       '(message "RECORD-START"))))
+  (let ((msg "RECORD-START"))
+    (progn (setf *record-status* t)
+	   (insert-log-emacs msg "red")
+	   (swank:eval-in-emacs
+	    `(message "%s" ,msg))
+)))
 
 (defun record-stop ()
-       (progn (setf *record-status* nil)
-	      (swank:eval-in-emacs
-	       '(message "RECORD-STOP"))
-	      (mach-fun-kiste-seq)))
+  (let ((msg "RECORD-STOP"))
+    (progn (setf *record-status* nil)
+	   (insert-log-emacs msg "blue")
+	   (swank:eval-in-emacs
+	    `(message "%s" ,msg))
+	   (mach-fun-kiste-seq))))
 
 (defun record-reset ()
-  (progn (setf *record-kiste* nil)
-	 (swank:eval-in-emacs
-	  '(message "*record-kiste* LEER"))))
+  (let ((msg "*record-kiste* RESET"))
+    (progn (setf *record-kiste* nil)
+	   (insert-log-emacs msg "violet")
+	   (swank:eval-in-emacs
+	    '(message "*record-kiste* RESET")))))
 
 (defun drag-passiert (lst)
   (let* ((start (nth 0 lst))
@@ -290,7 +297,7 @@
 							 msg
 							 " <REC>"))))
 	   (stouch (cddr convrted-poen-lst))	
-	   (insert-log-emacs msg "black")	; debug
+	   (insert-log-emacs msg "darkblue")	; debug
 	   (swank:eval-in-emacs
 	    `(message "CLICK-passiert: %s" ,msg )))))
 
@@ -330,8 +337,8 @@
   "(SLEEP 999) manipulate the 999 via fun-x by by-x"
   (setf #1=(nth 1 (nth 1 ele)) (funcall fun-x #1# by-x)))
 
-(defun sleep-kontrol-seq (fun-x by-x) 
-  (mapcar (lambda(ele)(sleep-kontrol-ele ele fun-x by-x)) *fun-kiste*))
+(defun sleep-kontrol-seq (kiste fun-x by-x) 
+  (mapcar (lambda(ele)(sleep-kontrol-ele ele fun-x by-x)) kiste))
 
 
 (defun drag-kontrol-ele (ele fun-x by-x)
@@ -339,28 +346,52 @@
   (if #1=(nth 5 (nth 1(nth 2 ele)))
       (setf #1# (funcall fun-x #1# by-x))))
 
-(defun drag-kontrol-seq (fun-x by-x)
-  (mapcar (lambda (ele) (drag-kontrol-ele ele fun-x by-x)) *fun-kiste*))
+;;; TODO name? not seq -> list od. etwas, eigentlich seq ist string, vector
+(defun drag-kontrol-seq (kiste fun-x by-x)
+  "list verstion from drag-kontrol-ele"
+  (mapcar (lambda (ele) (drag-kontrol-ele ele fun-x by-x)) kiste))
 
 ;;; save fun
 
-(defun fun-kiste-symbol (name)
-  "record-stop no need. during recording kann save."
+(defun fun-kiste-symbol (qname)
+  "current fun-kiste zu neue name symbolisieren. record-stop no need. during recording kann save."
   (progn (mach-fun-kiste-seq)
-	 `(defparameter ,name ',(copy-list *fun-kiste*))))
+	 `(defparameter ,qname ',(copy-list *fun-kiste*))))
+
+
+(defun fun-kiste-mod-symbol (qname)
+  `(defparameter ,qname ',(copy-list (eval qname))))
 
 (defun fun-kiste-set (name)
   "from current record-kiste defparameter, fuer saved kiste zu set, einfach (load *fun-kiste-path*) "
   (eval (fun-kiste-symbol name)))
 
 (defparameter *fun-kiste-save-path*
-  (merge-pathnames "fun-kiste-save.lisp" *working-dir*))
+  (merge-pathnames "fun-kiste-save.lisp" *working-dir*)
+    "fuer neue save file setting, not defvar sondern defparameter")
 
-(defun fun-kiste-save (kiste)
-  (let ((res (fun-kiste-symbol kiste)))
-    (progn (with-open-file (out *fun-kiste-save-path* :direction :output :if-exists :append)
-	     (print res out))
+(defun fun-kiste-save (qkiste)
+  (let* ((res (fun-kiste-symbol qkiste))
+	 (msg (format nil "FUN-KISTE-SAVE ~s" (symbol-name qkiste))))
+    (progn (with-open-file (out *fun-kiste-save-path* 
+				:direction :output :if-exists :append)
+	     (print res out)
+	     (eval res)			; automatich defparameter
+	     )
+	   (insert-log-emacs msg "red")
 	   (swank:eval-in-emacs
-	    `(message "FUN-KISTE-SAVE %s" ,(symbol-name kiste))))))
+	    `(message "%s" ,msg)))))
+
+(defun fun-kiste-mod-save (qkiste)
+  (let* ((res (fun-kiste-mod-symbol qkiste))
+	 (msg (format nil "FUN-KISTE-MOD-SAVE ~s" (symbol-name qkiste))))
+    (progn (with-open-file (out *fun-kiste-save-path* 
+				:direction :output :if-exists :append)
+	     (print res out)
+	     (eval res)			; automaticsh defparameter
+	     )
+	   (insert-log-emacs msg "red")
+	   (swank:eval-in-emacs
+	    `(message "%s" ,msg)))))
 
 ;; (format nil "(defparameter ~a ~a)" (symbol-name 'foo-2) foo-2)

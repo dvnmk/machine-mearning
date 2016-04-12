@@ -1,21 +1,13 @@
-(defmacro save-fun-kiste (save-name)
-       `(defparameter ,(intern (format nil "*~A*" ,save-name))
-	  ',*fun-kiste*)) 
-
-(defparameter *alle-weg*
-  '((progn (sleep ......))
-    (progn (...)))
-  
-    
-
 * image scanner
 ** (foo img start-poen end-poen)
 ** citibank
 *** y 701 797 893 dy=96
 *** x 31 89  dx=58
+
 * "1234" zu tastatur
 ** (postion #\a fmap) => 20
 ** (wo 20) => (x y)
+
 
 * ZU MACHEN
 ** DONE touch point kalibration
@@ -27,7 +19,15 @@
 *** DONE ohne record stop, fun-kiste-save od set, gebraucht?
 *** TODO defparameter, whnn die symbol interned schon, dann braucht be called setf od. egal mit defparameter
 *** TODO feedback to Emacs
-*** 
+*** DONE modification schone saved symbol not mit current kiste appended save zu machen => (fun-kiste-mod-save)
+*** DONE save -> automatisch defparameter eval
+*** TODO mod version kann nicht mit normales zu eins werden?
+
+** TODO name change
+*** mach-mal
+*** mach-fun-kiste-seq
+** TODO pathname besser org
+
 ** DONE dafuer braucht, bevor call (fun-kiste-symbol) (mach-fun-kiste-seq)
 *** fun-kiste -> make-fun-w/-name -> ("kiste-name" (progn ....))
 ** TODO opticl
@@ -38,15 +38,18 @@
 ** DONE fun-kiste als datei save in lisp file as txt format
 hinzufuegen, stream
 
+** TODO systematische drucken od. drag machen. via fun?		       :DENK:
 
 * HISTORY
 ** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man xs
 ** was bedeute die automatische maschine, A.I., Roboten, usw.? man sagt, wegen die ai roboten koentten die leute die arbeit verloren. 
   
+
 * SYNOPSIS
 ** (init)
 *** (fit-again)
 ** 
+
 
 * SIZE
 ** (1136 640)
@@ -55,54 +58,10 @@ hinzufuegen, stream
 ** (888 537)
 ** (706 434)
 
+
 * ACHTUNG
 ** erstmal (qt-run) dann (connect)?
-*** iphn mode change, than disconnect, deswegen
+*** Si, iphn mode change, than disconnect, deswegen
 
 * MEMO
-
-(defun mouse-start-rectangle (start-event)
-  (interactive "e")
-  (deactivate-mark)
-  (mouse-set-point start-event)
-  (rectangle-mark-mode +1)
-  (let ((drag-event))
-    (track-mouse
-      (while (progn
-               (setq drag-event (read-event))
-               (mouse-movement-p drag-event))
-        (mouse-set-point drag-event)))))
-
-(global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)
-
-
-(defun mouse-start-rectangle (start-event)                        
-  (interactive "e")                                               
-  (deactivate-mark)                                               
-  (mouse-set-point start-event)                                   
-  ;; (rectangle-mark-mode +1)
-  (message "%s" (mouse-pixel-position))
-
-  (let ((drag-event))                                             
-    (track-mouse                                                  
-      (while (progn                                               
-	       (setq drag-event (read-event))                     
-	       (mouse-movement-p drag-event))                     
-	(mouse-set-point drag-event)
-	(message "%s" (mouse-pixel-position))))))
-
-
-
-(defun mouse-start-rectangle (start-event)
-  (interactive "e")
-  (deactivate-mark)
-  (mouse-set-point start-event)
-  (rectangle-mark-mode +1)
-  (let ((drag-event))
-    (track-mouse
-      (while (progn
-               (setq drag-event (read-event))
-               (mouse-movement-p drag-event))
-        (mouse-set-point drag-event)))))
-
-(global-set-key (kbd "S-<down-mouse-1>") #'mouse-start-rectangle)
+** usb-c to iphone m/ gender not funkzt

@@ -99,13 +99,13 @@
     (2slime cmd)))
 
 (defun mach-mal ()
+  "einmal execute mit current fun-kiste"
   (interactive)
   (let ((cmd (format "(mach-mal)")))
     (2slime cmd)))
-(let ((cmd (format "(fun-kiste-save '%s)" "warum")))
-    (2slime cmd)) 
 
 (defun fun-kiste-save (kiste-name)
+  "current record-kiste -> fun-kiste y save it."
   (interactive "s:kiste-name: ")
   (let ((cmd (format "(fun-kiste-save '%s)" kiste-name)))
     (2slime cmd)))

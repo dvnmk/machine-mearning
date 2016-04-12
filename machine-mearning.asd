@@ -9,7 +9,4 @@
   :components ((:file "package")
 	       (:file "shot")
                (:file "machine-mearning")
-               (:file "key")
-	       ))
-
-
+               (:file "key")))
