@@ -129,7 +129,26 @@
 	    (define-key map (kbd "3") #'mach-mal)
 	    (define-key map (kbd "4") #'record-reset)
 	    
+	    (global-set-key  (kbd "s-1") #'record-start-tgl)
+	    (global-set-key  (kbd "s-2") #'fun-kiste-save)
+	    (global-set-key  (kbd "s-3") #'mach-mal)
+	    (global-set-key  (kbd "s-4") #'record-reset)
+	    
 	    map))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 (provide 'machine-mearning-mode)
 

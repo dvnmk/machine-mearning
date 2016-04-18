@@ -7,6 +7,7 @@
   :depends-on (#:cl-tesseract #:opticl #:external-program #:iterate)
   :serial t
   :components ((:file "package")
+	       ;; (:file "gehiem.lisp.gpg")
 	       (:file "shot")
                (:file "machine-mearning")
                (:file "key")))

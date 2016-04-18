@@ -1,5 +1,3 @@
-;;;; machine-mearning.lisp
-
 (in-package #:machine-mearning)
 
 ;;; "machine-mearning" goes here. Hacks and glory await!
@@ -214,6 +212,17 @@
 	(newline)
 	(end-of-buffer)))))
 
+
+;;; TODO
+(defun delete-log-emacs ()
+  (let ((wo (file-namestring *qt-wrapper-path*)))
+    (swank:eval-in-emacs
+     `(with-current-buffer ,wo
+	(end-of-buffer)
+	(mark-paragraph)
+;	(delete-region)
+	(end-of-buffer)))))
+
 (defun halbe (etwas-lst)
   "alle ele in list mit ratio, eigentlich nicht half machen, deswegen halbe"
   (mapcar (lambda (x) (* x *ratio*)) etwas-lst))
@@ -258,6 +267,7 @@
   (let ((msg "*record-kiste* RESET"))
     (progn (setf *record-kiste* nil)
 	   (insert-log-emacs msg "violet")
+;	   (delete-log-emacs)
 	   (swank:eval-in-emacs
 	    '(message "*record-kiste* RESET")))))
 
@@ -395,3 +405,46 @@
 	    `(message "%s" ,msg)))))
 
 ;; (format nil "(defparameter ~a ~a)" (symbol-name 'foo-2) foo-2)
+
+(defun mach (kiste)
+  (mapcar #'eval (reverse kiste)))
+
+(defun m (kiste)
+  (mach kiste))
+
+(defun sleep-null (kiste)
+  (sleep-kontrol-seq kiste #'* 0))
+
+(defun fun-kiste-save-load ()
+  (load *fun-kiste-save-path*))
+
+(defun back ()
+  (mach *back*))
+
+(defun ok ()
+  (mach *ok*))
+
+(defun up ()
+  (mach *up*))
+
+(defun down ()
+  (mach *down*))
+
+(defun up-1 ()
+  (cmd "activator send com.rpetrich.superscroller.up"))
+
+(defun down-1 ()
+  (cmd "activator send com.rpetrich.superscroller.down"))
+
+(defun bottom ()
+  (cmd "activator send com.rthakrar.taptoscrollforactivator.bottom"))
+
+(defun top ()
+  (cmd "activator send com.rthakrar.taptoscrollforactivator.top"))
+
+(defun middle ()
+  (cmd "activator send com.rthakrar.taptoscrollforactivator.middle"))
+
+
+;;
+

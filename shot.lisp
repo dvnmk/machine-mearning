@@ -1,12 +1,16 @@
-;; shot.lisp
-
 (in-package #:machine-mearning)
 
 ;; TODO
 ;; (eval-when (:compile-toplevel)
 ;;   (setf *default-pathname-defaults* *compile-file-truename*))
 
+;; TODO 
 ;; (setf *default-pathname-defaults* *load-truename*)
+
+;; (defparameter *working-dir* (make-pathname :defaults *load-truename*
+;; 				   :type nil
+;; 				   :name nil
+;; 				   :version nil))
 
 (defparameter *working-dir* 
   #P"/Users/dvnmk/quicklisp/local-projects/machine-mearning/")

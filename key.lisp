@@ -1,4 +1,3 @@
-;; key.lisp keyboard reader
 (in-package #:machine-mearning)
 
 (defun iter-box-rvrs (x0 y0 dx dy x-times y-times)
@@ -48,7 +47,7 @@
       (11 (nth 2 row-4)) ; backspace
       )))
 
-(defparameter *numpad-seq* "#1234567890!")
+(defparameter *numpad-seq* "/1234567890!")
 
 (defun touch-diese-char-numpad (char-x)
   (let* ((ori-xy (wozu-nth-btn-numpad (position char-x *numpad-seq*)))
@@ -155,6 +154,7 @@
 
 (defun crack-secupad ()
   (progn (shot-sym-down)
+	 (sleep 0.5)
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-secupad))))
 
@@ -207,3 +207,7 @@
 
 (defun type-string-enkey (string-x)
   (mapcar #'touch-diese-char-enkey (coerce string-x 'list)))
+
+(defun crack-secupad-y-type (x)
+  (progn (crack-secupad)
+	 (type-string-secupad x)))
