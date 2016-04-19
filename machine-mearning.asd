@@ -10,4 +10,5 @@
 	       ;; (:file "gehiem.lisp.gpg")
 	       (:file "shot")
                (:file "machine-mearning")
-               (:file "key")))
+               (:file "key")
+	       (:file "fun-kiste-save")))

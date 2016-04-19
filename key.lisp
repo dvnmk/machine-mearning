@@ -8,6 +8,7 @@
 
 
 (defun iter-box (x0 y0 dx dy x-times y-times)
+  "make box array at x-y cordination"
   (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
 	(collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
 		       (collect (list x y)))))) 
@@ -60,7 +61,7 @@
 
 ;;
 (defun loch-finden-citi ()
-  "Specific pixel gucken y barf die (x y) im reihe, ohne blau (0 0 101) => (x y) btn list /o loch"
+  "Specific PIXEL gucken y barf die (x y) im reihe, ohne blau (0 0 101) => (x y) btn list /o loch"
   (let ((x0 38)
 	(y0 700)
 	(dx 58)
@@ -142,7 +143,10 @@
   (let* ((ori-xy (wozu-nth-btn-secupad (position char-x *secupad-key-seq*)))
 	 (tar-xy (halbe ori-xy)))
     ;; (princ ori-xy)
-    (touch tar-xy)))
+    (touch tar-xy)
+    ;; TODO zwischen zeitraum ist es ok?
+ ;   (sleep 0.2)
+    ))
 
 
 (defun type-string-citi (string-x)
@@ -154,7 +158,7 @@
 
 (defun crack-secupad ()
   (progn (shot-sym-down)
-	 (sleep 0.5)
+	 (sleep 0.8)
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-secupad))))
 
@@ -211,3 +215,58 @@
 (defun crack-secupad-y-type (x)
   (progn (crack-secupad)
 	 (type-string-secupad x)))
+
+
+;;;
+;;upper pin
+(count-rgb-pixel '(0 0 0) '(220 826 35 31))
+
+;; lower pin
+(count-rgb-pixel '(0 0 0) '(220 (+ 826 78) 35 31))
+
+(let ((x0 220)
+      (y0 828)
+      (w 17)
+      (h 28)
+      (dx 17)
+      (dy 78)
+      (color '(55 55 55)))
+  (list
+   (count-rgb-pixel< color (list x0 y0 w h))
+   (count-rgb-pixel< color (list (+ x0 dx) y0 w h))
+   (count-rgb-pixel< color (list x0 (+ y0 dy) w h))
+   (count-rgb-pixel< color (list (+ x0 dx) (+ y0 dy) w h))
+   ))
+
+
+(defparameter *shot-path*
+  (merge-pathnames "shot.png" *working-dir*))
+
+;; (let ((welche (format nil "shot~a.png" "2528")))
+;;  (defparameter *shot-path*
+;;    (merge-pathnames welche *working-dir*))
+;;  (shot-read) )
+
+;; (let ((welche (format nil "shot~a.png" "2209")))
+;;  (defparameter *shot-path*
+;;    (merge-pathnames welche *working-dir*))
+;;  (shot-read) )
+
+;; (let ((welche (format nil "shot~a.png" "0301")))
+;;  (defparameter *shot-path*
+;;    (merge-pathnames welche *working-dir*))
+;;  (shot-read) )
+
+;; (let ((welche (format nil "shot~a.png" "2409")))
+;;  (defparameter *shot-path*
+;;    (merge-pathnames welche *working-dir*))
+;;  (shot-read) )
+
+
+;; scanned-boxy-pixel
+;; < 55
+;; +---+-----+---+---+---+---+---+---+----+-----+
+;; |1  |2    |3  |4  |5  |6  |7  |8  |9   |0    |
+;; +---+-----+---+---+---+---+---+---+----+-----+
+;; |68 | 87  |90 | 94|80 |   |58 |107| 100|  101|
+;; +---+-----+---+---+---+---+---+---+----+-----+

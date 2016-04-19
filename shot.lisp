@@ -46,17 +46,12 @@
 (defun shot-sym-down ()
   (progn
     (shot-shot)
-    (sleep 0.4)
+    (sleep 0.5)
     (shot-symlink)
     (sleep 0.3)
     (shot-down)
     ;; (setf *shot-img* (opticl:read-png-file *shot-path*)) ; zusammen in (progn) ist slow, als getrennt.
-    '*shot-img*
-    ;; (typecase *shot-img*
-    ;;   (opticl:8-bit-rgb-image
-    ;;    (locally  
-    ;; 	   (declare (type opticl:8-bit-rgb-image *shot-img*)))))
-    ))
+    '(shot-read)    ))
 
 (defun shot-read ()
   (declare (optimize (speed 3) (safety 0)))
@@ -89,15 +84,27 @@
 ;; boxy scanner
 
 (defun count-rgb-pixel (list-rgb boxy)
-  "Wie viel rgb-pixel in boxy, x0 y0 dx dy?"
+  "Wie viel rgb-pixel in boxy, x0 y0 w h?"
   (let* ((x0 (car boxy))
 	 (y0 (cadr boxy))
-	 (dx (caddr boxy))
-	 (dy (cadddr boxy))
-	 (x1 (+ x0 dx))
-	 (y1 (+ y0 dy)))
+	 (w (caddr boxy))
+	 (h (cadddr boxy))
+	 (x1 (+ x0 w))
+	 (y1 (+ y0 h)))
     (iter (for x from x0 to x1)
 	  (sum (iter (for y from y0 to y1)
 		     (counting (equalp  (opticl:pixel* *shot-img* y x) list-rgb)))))))
 
+
+(defun count-rgb-pixel< (list-rgb boxy)
+  "Wie viel rgb-pixel in boxy, x0 y0 w h? < version. only car of list-rgb is vergliechable. this fun is needed weil, + version kann nicht so unterschiedlichen farbe barfen."
+  (let* ((x0 (car boxy))
+	 (y0 (cadr boxy))
+	 (w (caddr boxy))
+	 (h (cadddr boxy))
+	 (x1 (+ x0 w))
+	 (y1 (+ y0 h)))
+    (iter (for x from x0 to x1)
+	  (sum (iter (for y from y0 to y1)
+		     (counting (<  (car (opticl:pixel* *shot-img* y x)) (car list-rgb))))))))
 

@@ -407,9 +407,11 @@
 ;; (format nil "(defparameter ~a ~a)" (symbol-name 'foo-2) foo-2)
 
 (defun mach (kiste)
+  "ok kiste! reverse y mapcar"
   (mapcar #'eval (reverse kiste)))
 
 (defun m (kiste)
+  "abkuerzung of #'mach"
   (mach kiste))
 
 (defun sleep-null (kiste)
