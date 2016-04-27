@@ -380,6 +380,7 @@
   (merge-pathnames "fun-kiste-save.lisp" *working-dir*)
     "fuer neue save file setting, not defvar sondern defparameter")
 
+;;; TODO als macro?
 (defun fun-kiste-save (qkiste)
   (let* ((res (fun-kiste-symbol qkiste))
 	 (msg (format nil "FUN-KISTE-SAVE ~s" (symbol-name qkiste))))

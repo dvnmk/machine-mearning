@@ -41,6 +41,16 @@
     (PROGN (SLEEP 0) (STOUCH (LIST 158.0 330.0 154.5 140.0 0.954)))
     (PROGN (SLEEP 0) (STOUCH (LIST 156.0 224.5)))))
 
+
+(defparameter *bank-ha*
+  '((progn (sleep 0.6) (stouch (list 147 195 162.5 319.5 0.284))) ; #'top not working
+    (progn (sleep 0.8) (type-string-numpad (concatenate 'string *my-ha* "/")) )
+    (PROGN (SLEEP 0.6) (STOUCH (LIST 221.5 112.5)))
+    (PROGN (SLEEP 0.6) (STOUCH (LIST 111.5 371.5)))
+    (PROGN (SLEEP 0.6) (STOUCH (LIST 54.5 284.5)))
+    (PROGN (SLEEP 0.6) (bottom))
+    (PROGN (SLEEP 0) (STOUCH (LIST 158.0 225.5 156.5 226.5 0.144)))))
+
 (DEFPARAMETER *KONTO-PIN*
   '((progn (sleep 0.8) (type-string-secupad (concatenate 'string *my-konto-pin* "/")))
     (progn (sleep 0) (crack-secupad))
@@ -49,11 +59,19 @@
     (progn (sleep 0) (top))))
 
 (DEFPARAMETER *SH-PIN*
-  '((progn (sleep 3) (stouch (list 161.5 310.5)))
+  '((progn (sleep 3.4) (stouch (list 161.5 310.5)))
     (PROGN (SLEEP 0) (STOUCH (LIST 265.5 380.5)))
     (progn (sleep 1))
     (progn (sleep 0) (type-string-numpad (concatenate 'string *my-sh-pin* "/")))
-    (progn (sleep 0) (sleep 0.5))
+    (progn (sleep 0.5))
+    (PROGN (SLEEP 0) (STOUCH (LIST 157.5 381.5)))))
+
+(defparameter *ha-pin*
+  '((progn (sleep 3.4) (stouch (list 161.5 310.5)))
+    (PROGN (SLEEP 0) (STOUCH (LIST 265.5 380.5)))
+    (progn (sleep 1))
+    (progn (sleep 0) (type-string-numpad (concatenate 'string *my-ha-pin* "/")))
+    (progn (sleep 0.5))
     (PROGN (SLEEP 0) (STOUCH (LIST 157.5 381.5)))))
 
 ;; secucard cracking kiste
@@ -66,12 +84,18 @@
 ;;; SYNOPSIS
 (auction)
 (m *select-order*)
-(m *paymethode*)
+(m *paymenthode*)
 (m *bankpay-agree*)
 (m *min-num*)
+
+(setf *my-sh* "110158255915")
 (m *bank-sh*)
+(m *bank-ha*)
+
 (m *konto-pin*)
+
 (m *SH-PIN*)
+(m *ha-pin*)
 
 (progn
   (m *select-order*)

@@ -15,7 +15,7 @@
 ** DONE swipe
 ** TODO ACTIVATOR MACRO
 ** TODO record system
-*** DONE -mode.el ; argutment
+*** DONE -mode.el ; argument
 *** DONE ohne record stop, fun-kiste-save od set, gebraucht?
 *** TODO defparameter, whnn die symbol interned schon, dann braucht be called setf od. egal mit defparameter
 *** TODO feedback to Emacs
@@ -36,14 +36,16 @@
 ** DONE mode.el record-start -> toggle
 ** TODO INFO CAPSULATE
 ** TODO PIN CODE CRACK
-
 ** DONE fun-kiste als datei save in lisp file as txt format
 hinzufuegen, stream
 
 ** TODO systematische drucken od. drag machen. via fun?		       :DENK:
+** TODO kiste-mod qkiste zu macro, weil um die quote zu weg
+** 
 
 * HISTORY
-** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man xs
+** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man  
+
 ** was bedeute die automatische maschine, A.I., Roboten, usw.? man sagt, wegen die ai roboten koentten die leute die arbeit verloren. 
   
 
@@ -65,5 +67,7 @@ hinzufuegen, stream
 ** erstmal (qt-run) dann (connect)?
 *** Si, iphn mode change, than disconnect, deswegen
 
+
 * MEMO
 ** usb-c to iphone m/ gender not funkzt
+** 

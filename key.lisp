@@ -94,6 +94,25 @@
 			  (return (nreverse r)))))))
 
 
+(defun loch-finden-bankpay ()
+  (let ((x0 22)
+	(y0 677)
+	(dx 58)
+	(dy 96)
+	(x-times 10)
+	(y-times 3)
+	(dx-boxy 17)
+	(dy-boxy 15)
+	(quux (list 0 0 0)))
+    (iter (for y from y0 to (+ y0 (* dy y-times)) by dy)
+	  (collect (iter (for x from x0 to (+ x0 (* dx x-times)) by dx)
+			 (if (> (count-rgb-pixel quux `(,x ,y ,dx-boxy ,dy-boxy))
+				0)
+			     (collect (list x y))))
+	    into r at beginning)
+	  (finally (progn (push '((555 1079)) r) ; "/"
+			  (return (nreverse r)))))))
+
 (defparameter *loch-gefunden-xy-map* nil)
 
 (defun wozu-nth-btn-citi (x)
@@ -128,10 +147,30 @@
 	  ((< x #2=(+ #1# len-2))	(nth (- x #1#) row-2))
 	  (t				(nth (- x #2#) row-3)))))
 
+
+(defun wozu-nth-btn-bankpay (x)
+  "nth btn => position (x y)"
+  (let* (row-0 (nth 0 *loch-gefunden-xy-map*))
+    (row-1 (nth 1 *loch-gefunden-xy-map*))
+    (row-2 (nth 2 *loch-gefunden-xy-map*))
+    (row-3 (nth 3 *loch-gefunden-xy-map*))
+    (row-4 (nth 4 *loch-gefunden-xy-map*))
+    (len-0 (length row-0))
+    (len-1 (length row-1))
+    (len-2 (length row-2))
+    (len-3 (length row-3))
+    (cond ((< x len-0)			(nth x row-0))
+	  ((< x #1=(+ len-0 len-1))	(nth (- x len-0) row-1))
+	  ((< x #2=(+ #1# len-2))	(nth (- x #1#) row-2))
+	  ((< x #3=(+ #2# len-3))	(nth (- x #2#) row-3))
+	  (t				(nth (- x #3#) row-4)))))
+
 ;; ^ shift ! backspace $ change-keyboard? @ en-@ # spacebar / return
 (defparameter *citi-key-seq* "1234567890qwertyuiopasdfghjkl^zxcvbnm!!$$@@####////")
 
 (defparameter *secupad-key-seq* "1234567890!/")
+
+(defparameter *bankpay-key-seq* "1234567890qwertyuiopasdfghjklzxcvbnm/")
 
 (defun touch-diese-char-citi (char-x)
   (let* ((ori-xy (wozu-nth-btn-citi (position char-x *citi-key-seq*)))
@@ -148,6 +187,13 @@
  ;   (sleep 0.2)
     ))
 
+;;; TODO debug probe
+(defun touch-diese-char-bankpay (char-x)
+  (let* ((ori-xy (wozu-nth-btn-bankpay (position char-x *bankpay-key-seq*)))
+	 (tar-xy (halbe ori-xy)))
+    ;; (princ ori-xy)
+   (touch tar-xy)
+    ))
 
 (defun type-string-citi (string-x)
   (mapcar #'touch-diese-char-citi (coerce string-x 'list)))
@@ -155,6 +201,8 @@
 (defun type-string-secupad (string-x)
   (mapcar #'touch-diese-char-secupad (coerce string-x 'list)))
 
+(defun type-string-bankpay (string-x)
+  (mapcar #'touch-diese-char-bankpay (coerce string-x 'list)))
 
 (defun crack-secupad ()
   (progn (shot-sym-down)
@@ -162,11 +210,15 @@
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-secupad))))
 
-
 (defun crack-citi ()
   (progn (shot-sym-down)
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-citi))))
+
+(defun crack-bankpay ()
+  (progn (shot-sym-down)
+	 (shot-read)
+	 (setf *loch-gefunden-xy-map* (loch-finden-bankpay))))
 
 
 ;; enkey
@@ -216,52 +268,33 @@
   (progn (crack-secupad)
 	 (type-string-secupad x)))
 
-
-;;;
-;;upper pin
-(count-rgb-pixel '(0 0 0) '(220 826 35 31))
-
-;; lower pin
-(count-rgb-pixel '(0 0 0) '(220 (+ 826 78) 35 31))
-
-(let ((x0 220)
-      (y0 828)
-      (w 17)
-      (h 28)
-      (dx 17)
-      (dy 78)
-      (color '(55 55 55)))
-  (list
-   (count-rgb-pixel< color (list x0 y0 w h))
-   (count-rgb-pixel< color (list (+ x0 dx) y0 w h))
-   (count-rgb-pixel< color (list x0 (+ y0 dy) w h))
-   (count-rgb-pixel< color (list (+ x0 dx) (+ y0 dy) w h))
-   ))
+(defun crack-bankpay-y-type (x)
+  (progn (crack-bankpay)
+	 (type-string-bankpay x)))
 
 
-(defparameter *shot-path*
-  (merge-pathnames "shot.png" *working-dir*))
+(defun wie-viel-55 ()
+  (let ((x0 220)
+	(y0 828)
+	(w 17)
+	(h 28)
+	(dx 17)
+	(dy 78)
+	(color '(55 55 55)))
+    (list
+     (count-rgb-pixel< color (list x0 y0 w h))
+     (count-rgb-pixel< color (list (+ x0 dx) y0 w h))
+     (count-rgb-pixel< color (list x0 (+ y0 dy) w h))
+     (count-rgb-pixel< color (list (+ x0 dx) (+ y0 dy) w h)))))
 
-;; (let ((welche (format nil "shot~a.png" "2528")))
-;;  (defparameter *shot-path*
-;;    (merge-pathnames welche *working-dir*))
-;;  (shot-read) )
+;; TODO DYNAMIC SCOPING BENUTZUNG
+(defun wie-viel-55-in-x (x) 
+  (let ((*shot-path* (merge-pathnames (format nil "shot~a.png" x)
+				      *working-dir*)))
+    (shot-read)
+    (wie-viel-55)))
 
-;; (let ((welche (format nil "shot~a.png" "2209")))
-;;  (defparameter *shot-path*
-;;    (merge-pathnames welche *working-dir*))
-;;  (shot-read) )
-
-;; (let ((welche (format nil "shot~a.png" "0301")))
-;;  (defparameter *shot-path*
-;;    (merge-pathnames welche *working-dir*))
-;;  (shot-read) )
-
-;; (let ((welche (format nil "shot~a.png" "2409")))
-;;  (defparameter *shot-path*
-;;    (merge-pathnames welche *working-dir*))
-;;  (shot-read) )
-
+;;2528 2209 0301 2409
 
 ;; scanned-boxy-pixel
 ;; < 55
