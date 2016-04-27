@@ -206,7 +206,7 @@
 
 (defun crack-secupad ()
   (progn (shot-sym-down)
-	 (sleep 0.8)
+;	 (sleep 0.8)
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-secupad))))
 
@@ -274,6 +274,7 @@
 
 
 (defun wie-viel-55 ()
+  "accumulate pixel < 55 in boxy"
   (let ((x0 220)
 	(y0 828)
 	(w 17)
@@ -294,12 +295,25 @@
     (shot-read)
     (wie-viel-55)))
 
-;;2528 2209 0301 2409
+;;2528 2209 0301 2409 1406
 
-;; scanned-boxy-pixel
+;;; TODO alist plist substitute etc?
+(defparameter *pin-seq* (list 68 87 90 94 80 102 58 107 100 101))
+
+(defparameter *pin-seq* '((68 . 1) (87 . 2) (90 . 3) (94 . 4) (80 . 5)
+			  (102 . 6) (58 . 7) (107 . 8) (100 . 9) (101 . 0)))
+
+;; scanned-boxy-pixel gefunden
 ;; < 55
-;; +---+-----+---+---+---+---+---+---+----+-----+
-;; |1  |2    |3  |4  |5  |6  |7  |8  |9   |0    |
-;; +---+-----+---+---+---+---+---+---+----+-----+
-;; |68 | 87  |90 | 94|80 |   |58 |107| 100|  101|
-;; +---+-----+---+---+---+---+---+---+----+-----+
+;; +---+---+---+---+---+---+---+---+----+----+
+;; |1  |2  |3  |4  |5  |6  |7  |8  |9   |0   |
+;; +---+---+---+---+---+---+---+---+----+----+
+;; |68 |87 |90 | 94|80 |102|58 |107| 100|101 |
+;; +---+---+---+---+---+---+---+---+----+----+
+
+
+(defun que-pin (bank-slot x y)
+"query pin of bank-slot "
+  (let ((pin0 (nth x bank-slot))
+	(pin1 (nth y bank-slot)))
+    (list (first pin0) (second pin1))))

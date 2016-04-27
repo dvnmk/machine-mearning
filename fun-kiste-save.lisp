@@ -88,7 +88,6 @@
 (m *bankpay-agree*)
 (m *min-num*)
 
-(setf *my-sh* "110158255915")
 (m *bank-sh*)
 (m *bank-ha*)
 
