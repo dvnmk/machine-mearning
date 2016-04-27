@@ -84,7 +84,7 @@
 ;;; SYNOPSIS
 (auction)
 (m *select-order*)
-(m *paymenthode*)
+(m *paymethode*)
 (m *bankpay-agree*)
 (m *min-num*)
 

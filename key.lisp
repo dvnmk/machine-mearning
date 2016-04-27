@@ -220,14 +220,13 @@
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-bankpay))))
 
-
 ;; enkey
 (defun mach-enkey ()
   "x0 y0 dx dy row col"  
   (let* ((row-0 (list 32 766 64 1 9 0))
 	 (row-1 (list 64 874 64 1 8 0))
-	 (row-2 (list 61 989 54 1 8 0))
-	 (row-3 (list 35 1100 61 1 8 0))
+	 (row-2 (list 128 989 64 1 7 0))
+	 (row-3 (list 38 1100 81 1 8 0))
 	 (xy-0 (apply #'iter-box row-0))
 	 (xy-1 (apply #'iter-box row-1))
 	 (xy-2 (apply #'iter-box row-2))
@@ -238,7 +237,8 @@
 
 ;; TODO kali  m/ lezte row
 ;; ^ shift, ! bs $ num @ kbd #\spaceko spc / ok
-(defparameter *enkey-seq* "qweertyuiopasdfghjkl^zxcvbnm!$@ /")
+;; shift not included
+(defparameter *enkey-seq* "qwertyuiopasdfghjklzxcvbnm!$@    /")
 
 (defun wozu-nth-btn-enkey (x)
   "nth btn => position (x y)"
@@ -259,7 +259,7 @@
   (let* ((ori-xy (wozu-nth-btn-enkey (position char-x *enkey-seq*)))
 	 (tar-xy (halbe ori-xy)))
     ;; (princ ori-xy)
-    (princ tar-xy)))
+    (stouch tar-xy)))
 
 (defun type-string-enkey (string-x)
   (mapcar #'touch-diese-char-enkey (coerce string-x 'list)))
