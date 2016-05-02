@@ -81,35 +81,35 @@
     (progn (sleep 0.2) (top)) ; WICHTIG, WEGEN ABSOLUTE POSTION KALIBRATION
     (PROGN (SLEEP 0) (STOUCH (LIST 247.5 421.5)))))
 
-;;; SYNOPSIS
-(auction)
-(m *select-order*)
-(m *paymethode*)
-(m *bankpay-agree*)
-(m *min-num*)
+;; ;;; SYNOPSIS
+;; (auction)
+;; (m *select-order*)
+;; (m *paymethode*)
+;; (m *bankpay-agree*)
+;; (m *min-num*)
 
-(m *bank-sh*)
-(m *bank-ha*)
+;; (m *bank-sh*)
+;; (m *bank-ha*)
 
-(m *konto-pin*)
+;; (m *konto-pin*)
 
-(m *SH-PIN*)
-(m *ha-pin*)
+;; (m *SH-PIN*)
+;; (m *ha-pin*)
 
-(progn
-  (m *select-order*)
-  (sleep 4.8)
-  (m *paymethode*)
-  (sleep 3.5)
-  (m *bankpay-agree*)
-  (sleep 1)
-  (m *min-num*)
-  (sleep 2.4)
-  (m *bank-sh*)
-  (sleep 1) ;
-  (m *konto-pin*)
-  (sleep 1) ;
-  (m *sh-pin*)
-  )
+;; (progn
+;;   (m *select-order*)
+;;   (sleep 4.8)
+;;   (m *paymethode*)
+;;   (sleep 3.5)
+;;   (m *bankpay-agree*)
+;;   (sleep 1)
+;;   (m *min-num*)
+;;   (sleep 2.4)
+;;   (m *bank-sh*)
+;;   (sleep 1) ;
+;;   (m *konto-pin*)
+;;   (sleep 1) ;
+;;   (m *sh-pin*)
+;;   )
 
 

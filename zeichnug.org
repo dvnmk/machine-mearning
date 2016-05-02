@@ -50,10 +50,11 @@ hinzufuegen, stream
   
 
 * SYNOPSIS
+** gandalf
 ** (init)
 *** (fit-again)
-** 
-
+** (connect)
+** (disconnect)
 
 * SIZE
 ** (1136 640)
@@ -62,11 +63,9 @@ hinzufuegen, stream
 ** (888 537)
 ** (706 434)
 
-
 * ACHTUNG
 ** erstmal (qt-run) dann (connect)?
 *** Si, iphn mode change, than disconnect, deswegen
-
 
 * MEMO
 ** usb-c to iphone m/ gender not funkzt

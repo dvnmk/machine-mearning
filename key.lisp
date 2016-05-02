@@ -150,15 +150,15 @@
 
 (defun wozu-nth-btn-bankpay (x)
   "nth btn => position (x y)"
-  (let* (row-0 (nth 0 *loch-gefunden-xy-map*))
-    (row-1 (nth 1 *loch-gefunden-xy-map*))
-    (row-2 (nth 2 *loch-gefunden-xy-map*))
-    (row-3 (nth 3 *loch-gefunden-xy-map*))
-    (row-4 (nth 4 *loch-gefunden-xy-map*))
-    (len-0 (length row-0))
-    (len-1 (length row-1))
-    (len-2 (length row-2))
-    (len-3 (length row-3))
+  (let* ((row-0 (nth 0 *loch-gefunden-xy-map*))
+	 (row-1 (nth 1 *loch-gefunden-xy-map*))
+	 (row-2 (nth 2 *loch-gefunden-xy-map*))
+	 (row-3 (nth 3 *loch-gefunden-xy-map*))
+	 (row-4 (nth 4 *loch-gefunden-xy-map*))
+	 (len-0 (length row-0))
+	 (len-1 (length row-1))
+	 (len-2 (length row-2))
+	 (len-3 (length row-3)))
     (cond ((< x len-0)			(nth x row-0))
 	  ((< x #1=(+ len-0 len-1))	(nth (- x len-0) row-1))
 	  ((< x #2=(+ #1# len-2))	(nth (- x #1#) row-2))
@@ -220,7 +220,9 @@
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-bankpay))))
 
+
 ;; enkey
+;;; TODO append returns new list ist es ok? append ist expensive, sag der.
 (defun mach-enkey ()
   "x0 y0 dx dy row col"  
   (let* ((row-0 (list 32 766 64 1 9 0))
@@ -231,7 +233,7 @@
 	 (xy-1 (apply #'iter-box row-1))
 	 (xy-2 (apply #'iter-box row-2))
 	 (xy-3 (apply #'iter-box row-3)))
-    (append xy-0 xy-1 xy-2 xy-3)))
+    (nconc xy-0 xy-1 xy-2 xy-3)))
 
 (defparameter *enkey-xy-map* (mach-enkey))
 
@@ -297,7 +299,7 @@
 
 ;;2528 2209 0301 2409 1406
 
-;;; TODO alist plist substitute etc?
+;;; TODO alist plist substitute etc? array?!
 (defparameter *pin-seq* (list 68 87 90 94 80 102 58 107 100 101))
 
 (defparameter *pin-seq* '((68 . 1) (87 . 2) (90 . 3) (94 . 4) (80 . 5)
@@ -312,8 +314,38 @@
 ;; +---+---+---+---+---+---+---+---+----+----+
 
 
-(defun que-pin (bank-slot x y)
-"query pin of bank-slot "
-  (let ((pin0 (nth x bank-slot))
-	(pin1 (nth y bank-slot)))
+(defun que-pin (bank-slot lst)
+  "query pin of bank-slot durch geheim, lst ist wie (24 09) "
+  (let*  ((x (car lst))
+	  (y (cadr lst))
+	  (pin0 (nth x bank-slot))
+	  (pin1 (nth y bank-slot)))
     (list (first pin0) (second pin1))))
+
+(defun finde-auf-pin-seq (lst)
+  "find die nummer auf pin-seq from wie-viel-55"
+  (mapcar (lambda (x) (cdr (assoc x *pin-seq*)))
+	  lst))
+
+(defun parse-list4-list2 (lst)
+  "(2 4 0 9) => (24 09)"
+  (let* ((a0 (format nil "~d" (nth 0 lst)))
+	 (a1 (format nil "~d" (nth 1 lst)))
+	 (b0 (format nil "~d" (nth 2 lst)))
+	 (b1 (format nil "~d" (nth 3 lst)))
+	 (res (list (concatenate 'string a0 a1) (concatenate 'string b0 b1))))
+    (format t "~a ; OCR-gt" res)
+    (mapcar #'parse-integer res)
+))
+
+(defparameter *gefunden-pin* nil)
+
+;; (que-pin *sh* (parse-list4-list2 (finde-auf-pin-seq (wie-viel-55))))
+
+(defun crack-pin (bank-slot)
+  "=> pin code, um zu getyped werden"
+  (progn
+    ;; (shot-sym-down)
+    (shot-read)
+    (setf *gefunden-pin* (que-pin bank-slot (parse-list4-list2
+					     (finde-auf-pin-seq (wie-viel-55)))))))
