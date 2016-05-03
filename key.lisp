@@ -270,6 +270,7 @@
   (progn (crack-secupad)
 	 (type-string-secupad x)))
 
+;;; TODO unbenutzte fun, gebraucht?
 (defun crack-bankpay-y-type (x)
   (progn (crack-bankpay)
 	 (type-string-bankpay x)))
@@ -320,7 +321,8 @@
 	  (y (cadr lst))
 	  (pin0 (nth x bank-slot))
 	  (pin1 (nth y bank-slot)))
-    (list (first pin0) (second pin1))))
+    (list (format nil "~d" (first pin0))
+	  (format nil "~d" (second pin1)))))
 
 (defun finde-auf-pin-seq (lst)
   "find die nummer auf pin-seq from wie-viel-55"
@@ -345,7 +347,9 @@
 (defun crack-pin (bank-slot)
   "=> pin code, um zu getyped werden"
   (progn
-    ;; (shot-sym-down)
+    (shot-sym-down)
     (shot-read)
     (setf *gefunden-pin* (que-pin bank-slot (parse-list4-list2
 					     (finde-auf-pin-seq (wie-viel-55)))))))
+
+;; (crack-secupad-y-type *gefunden-pin*)

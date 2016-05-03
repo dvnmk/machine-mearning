@@ -8,7 +8,7 @@
 
 (DEFPARAMETER *SELECT-ORDER*
   '((PROGN (SLEEP 1) (STOUCH (LIST 239.5 533.0)))
-    (PROGN (SLEEP 1) (STOUCH (LIST 29.0 230.5)))
+    (PROGN (SLEEP 1.4) (STOUCH (LIST 29.0 230.5)))
     (PROGN (SLEEP 1.8) (STOUCH (LIST 26.0 85.0)))
     (PROGN (SLEEP 0) (STOUCH (LIST 251.5 41.0)))))
 
@@ -75,41 +75,73 @@
     (PROGN (SLEEP 0) (STOUCH (LIST 157.5 381.5)))))
 
 ;; secucard cracking kiste
-(DEFPARAMETER *foo*
-  '((progn (sleep 0.5) (type-string-secupad (concatenate 'string *my-konto-pin* "/")))
-    (progn (sleep 0) (crack-secupad))
-    (progn (sleep 0.2) (top)) ; WICHTIG, WEGEN ABSOLUTE POSTION KALIBRATION
-    (PROGN (SLEEP 0) (STOUCH (LIST 247.5 421.5)))))
+(DEFPARAMETER *crack-pin-sh*
+  '((progn (sleep 0.5) (type-string-secupad (concatenate 'string
+							 (cadr *gefunden-pin*) "/")))
+    (progn (sleep 0.6) (crack-secupad))
+    (progn (sleep 0.8) (stouch (list 281.0 458.5)))
+    ;; zwote
+    (progn (sleep 0.5) (type-string-secupad (concatenate 'string
+							 (car *gefunden-pin*) "/")))
+    (progn (sleep 0.6) (crack-secupad))
+    ;; (progn (sleep 0.2) (top)) ; WICHTIG, WEGEN ABSOLUTE POSTION KALIBRATION
+    (PROGN (SLEEP 0) (STOUCH (LIST 247.5 421.5)))
+    (progn (sleep 0) (crack-pin *sh*))))
 
-;; ;;; SYNOPSIS
-;; (auction)
-;; (m *select-order*)
-;; (m *paymethode*)
-;; (m *bankpay-agree*)
-;; (m *min-num*)
+(DEFPARAMETER *crack-pin-ha*
+  '((progn (sleep 0.5) (type-string-secupad (concatenate 'string
+							 (cadr *gefunden-pin*) "/")))
+    (progn (sleep 0.6) (crack-secupad))
+    (progn (sleep 0.8) (stouch (list 281.0 458.5)))
+    ;; zwote
+    (progn (sleep 0.5) (type-string-secupad (concatenate 'string
+							 (car *gefunden-pin*) "/")))
+    (progn (sleep 0.6) (crack-secupad))
+    ;; (progn (sleep 0.2) (top)) ; WICHTIG, WEGEN ABSOLUTE POSTION KALIBRATION
+    (PROGN (SLEEP 0) (STOUCH (LIST 247.5 421.5)))
+    (progn (sleep 0) (crack-pin *ha*))))
 
-;; (m *bank-sh*)
-;; (m *bank-ha*)
+;;; SYNOPSIS
+(auction)
+(m *select-order*)
+(m *paymethode*)
+(m *bankpay-agree*)
+(m *min-num*)
 
-;; (m *konto-pin*)
+(m *bank-sh*)
+(m *bank-ha*)
 
-;; (m *SH-PIN*)
-;; (m *ha-pin*)
+(m *konto-pin*)
 
-;; (progn
-;;   (m *select-order*)
-;;   (sleep 4.8)
-;;   (m *paymethode*)
-;;   (sleep 3.5)
-;;   (m *bankpay-agree*)
-;;   (sleep 1)
-;;   (m *min-num*)
-;;   (sleep 2.4)
-;;   (m *bank-sh*)
-;;   (sleep 1) ;
-;;   (m *konto-pin*)
-;;   (sleep 1) ;
-;;   (m *sh-pin*)
-;;   )
+(m *SH-PIN*)
+(m *ha-pin*)
 
+(m *crack-pin-sh*)
+(m *crack-pin-ha*)
+
+;; zwischen zeit kontroled progn
+(progn
+  (m *select-order*)
+  (sleep 4.8)
+  (m *paymethode*)
+  (sleep 3.5)
+  (m *bankpay-agree*)
+  (sleep 1)
+  (m *min-num*)
+  (sleep 2.4)
+  (m *bank-sh*)
+  (sleep 1) ;
+  (m *konto-pin*)
+  (sleep 1) ;
+  (m *sh-pin*)
+  )
+
+(DEFPARAMETER *pay-confirm*
+  '((progn (sleep 0) (stouch (list last-confirm-xy-pos)))
+    (progn (sleep 0) (type-string-bankpay (concatenate 'string
+						       *confirm-code*
+						       "/")))
+    (progn (sleep 0.4) (crack-bankpay))
+    (PROGN (SLEEP 0.4) (STOUCH (LIST 145.0 201.5)))
+    (PROGN (SLEEP 0) (STOUCH (LIST 107.5 517.0)))))
 
