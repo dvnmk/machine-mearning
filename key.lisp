@@ -206,7 +206,6 @@
 
 (defun crack-secupad ()
   (progn (shot-sym-down)
-;	 (sleep 0.8)
 	 (shot-read)
 	 (setf *loch-gefunden-xy-map* (loch-finden-secupad))))
 

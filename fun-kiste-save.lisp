@@ -15,7 +15,7 @@
 (DEFPARAMETER *paymethode*
   '((PROGN (SLEEP 0.7) (STOUCH (LIST 161.5 187.5)))
     (PROGN (SLEEP 1) (bottom))
-    (PROGN (SLEEP 0.7) (STOUCH (LIST 170.0 279.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 170.0 280.0)))
     (PROGN (SLEEP 0.7) (up))
     (PROGN (SLEEP 0) (bottom))))
 
@@ -24,13 +24,12 @@
     (PROGN (SLEEP 1) (STOUCH (LIST 36.0 201.5)))
     (PROGN (SLEEP 0) (STOUCH (LIST 260.5 83.0))))) 
 
-
 (DEFPARAMETER *MIN-NUM*
   '((type-string-secupad (concatenate 'string *my-min* "/"))
-    (progn (sleep 0.5))
+    (progn (sleep 0.6))
     (progn (crack-secupad))
-    (progn (sleep 1))
-    (PROGN (SLEEP 0) (STOUCH (LIST 199.0 184.5))))) 
+    (progn (sleep 1.2))
+    (PROGN (SLEEP 0.2) (STOUCH (LIST 199.0 184.5))))) 
 
 (DEFPARAMETER *BANK-SH*
   '((progn (sleep 0.8) (type-string-numpad (concatenate 'string *my-sh* "/")) )
@@ -53,8 +52,7 @@
 
 (DEFPARAMETER *KONTO-PIN*
   '((progn (sleep 0.8) (type-string-secupad (concatenate 'string *my-konto-pin* "/")))
-    (progn (sleep 0) (crack-secupad))
-    (progn (sleep 1))
+    (progn (sleep 1.2) (crack-secupad))
     (PROGN (SLEEP 0.8) (STOUCH (LIST 198.5 301.5)))
     (progn (sleep 0) (top))))
 
@@ -79,27 +77,15 @@
   '((progn (sleep 0.5) (type-string-secupad (concatenate 'string
 							 (cadr *gefunden-pin*) "/")))
     (progn (sleep 0.6) (crack-secupad))
-    (progn (sleep 0.8) (stouch (list 281.0 458.5)))
+    (progn (sleep 2) (stouch (list 281.0 458.5)))
     ;; zwote
     (progn (sleep 0.5) (type-string-secupad (concatenate 'string
 							 (car *gefunden-pin*) "/")))
     (progn (sleep 0.6) (crack-secupad))
     ;; (progn (sleep 0.2) (top)) ; WICHTIG, WEGEN ABSOLUTE POSTION KALIBRATION
     (PROGN (SLEEP 0) (STOUCH (LIST 247.5 421.5)))
-    (progn (sleep 0) (crack-pin *sh*))))
-
-(DEFPARAMETER *crack-pin-ha*
-  '((progn (sleep 0.5) (type-string-secupad (concatenate 'string
-							 (cadr *gefunden-pin*) "/")))
-    (progn (sleep 0.6) (crack-secupad))
-    (progn (sleep 0.8) (stouch (list 281.0 458.5)))
-    ;; zwote
-    (progn (sleep 0.5) (type-string-secupad (concatenate 'string
-							 (car *gefunden-pin*) "/")))
-    (progn (sleep 0.6) (crack-secupad))
-    ;; (progn (sleep 0.2) (top)) ; WICHTIG, WEGEN ABSOLUTE POSTION KALIBRATION
-    (PROGN (SLEEP 0) (STOUCH (LIST 247.5 421.5)))
-    (progn (sleep 0) (crack-pin *ha*))))
+    (progn (sleep 0.4) (crack-pin *sh*))
+    (progn (sleep 0) (top))))
 
 ;;; SYNOPSIS
 (auction)
@@ -107,41 +93,45 @@
 (m *paymethode*)
 (m *bankpay-agree*)
 (m *min-num*)
-
 (m *bank-sh*)
-(m *bank-ha*)
-
+;;(m *bank-ha*)
 (m *konto-pin*)
-
 (m *SH-PIN*)
-(m *ha-pin*)
-
+;; (m *ha-pin*)
 (m *crack-pin-sh*)
-(m *crack-pin-ha*)
+;; (m *crack-pin-ha*)
+(m *pay-confirm*)
 
 ;; zwischen zeit kontroled progn
-(progn
-  (m *select-order*)
-  (sleep 4.8)
-  (m *paymethode*)
-  (sleep 3.5)
-  (m *bankpay-agree*)
-  (sleep 1)
-  (m *min-num*)
-  (sleep 2.4)
-  (m *bank-sh*)
-  (sleep 1) ;
-  (m *konto-pin*)
-  (sleep 1) ;
-  (m *sh-pin*)
-  )
+(defun venga ()
+  "this is not a thread progn"
+  (progn
+    (m *select-order*)
+    (sleep 5)
+    (m *paymethode*)
+    (sleep 3.5)
+    (m *bankpay-agree*)
+    (sleep 1)
+    (m *min-num*)
+    (sleep 2.4)
+    (m *bank-sh*)
+    ;; (m *bank-ha*)
+    (sleep 1.2)			;
+    (m *konto-pin*)
+    (sleep 1)		;
+    (m *sh-pin*)
+    ;; (m *ha-pin*)
+    (sleep 1)
+    (m *crack-pin-sh*)
+    (sleep 1)
+    (m *pay-confirm*)))
 
 (DEFPARAMETER *pay-confirm*
-  '((progn (sleep 0) (stouch (list last-confirm-xy-pos)))
+  '((progn (sleep 3) (stouch (list 163.5 514.5)))
     (progn (sleep 0) (type-string-bankpay (concatenate 'string
 						       *confirm-code*
 						       "/")))
-    (progn (sleep 0.4) (crack-bankpay))
+    (progn (sleep 1) (crack-bankpay))
     (PROGN (SLEEP 0.4) (STOUCH (LIST 145.0 201.5)))
     (PROGN (SLEEP 0) (STOUCH (LIST 107.5 517.0)))))
 
@@ -153,3 +143,10 @@
     (progn (sleep 0.6) (stouch (list 85.5 540.5)))
     (progn (sleep 0) (fotos))))
 
+(DEFPARAMETER *ZURUCK*
+  '((PROGN (SLEEP 2.489) (STOUCH (LIST 239.5 330.0)))
+    (PROGN (SLEEP 2.571) (STOUCH (LIST 33.0 341.5)))
+    (PROGN (SLEEP 4.77) (STOUCH (LIST 237.0 540.0)))
+    (PROGN (SLEEP 2) (STOUCH (LIST 54.0 393.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 153.5 96.0)))
+    (progn (sleep 0) (bottom))    )) 

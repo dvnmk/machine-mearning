@@ -44,8 +44,6 @@
       (swipe lst)
       (touch lst)))
 
-
-
 (defun zzz ()
   "Push the sleep button on iphone"
   (cmd "activator send libactivator.system.sleepbutton"))
@@ -94,7 +92,7 @@
 ;; DONE defvar? 
 (defvar *qt-wrapper-path* (merge-pathnames "qt-wrapper" *working-dir*))
 
-;;
+;;; TODO wenn es keine *shot-path* real file exists? dann wie?
 (let ((shot-filename (file-namestring *shot-path*)))
   (swank:eval-in-emacs
    `(defun setup-fit ()

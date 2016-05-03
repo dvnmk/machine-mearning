@@ -50,6 +50,7 @@
     (shot-symlink)
     (sleep 0.8)
     (shot-down)
+;;    (sleep 0.6)
     ;; (setf *shot-img* (opticl:read-png-file *shot-path*)) ; zusammen in (progn) ist slow, als getrennt.
     '(shot-read)    ))
 
