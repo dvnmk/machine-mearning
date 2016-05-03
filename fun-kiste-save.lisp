@@ -145,3 +145,11 @@
     (PROGN (SLEEP 0.4) (STOUCH (LIST 145.0 201.5)))
     (PROGN (SLEEP 0) (STOUCH (LIST 107.5 517.0)))))
 
+(DEFPARAMETER *FOTOS-LOSCH*
+  '((PROGN (SLEEP 0.6) (STOUCH (LIST 160.5 484.0)))
+    (PROGN (SLEEP 0.6) (STOUCH (LIST 295.0 545.0)))
+    (PROGN (SLEEP 0.6) (STOUCH (LIST 280.5 89.5)))
+    (PROGN (SLEEP 0.6) (STOUCH (LIST 263.5 43.0)))
+    (progn (sleep 0.6) (stouch (list 85.5 540.5)))
+    (progn (sleep 0) (fotos))))
+
