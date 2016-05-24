@@ -275,35 +275,54 @@
 	 (type-string-bankpay x)))
 
 
-(defun wie-viel-55 ()
-  "accumulate pixel < 55 in boxy"
-  (let ((x0 220)
-	(y0 828)
-	(w 17)
-	(h 28)
-	(dx 17)
-	(dy 78)
-	(color '(55 55 55)))
+(defun wie-viel-255 ()
+  "wie viel pixel = 255 in boxy"
+  (let ((x0 151) (y0 604)
+	(w 25) (h 36)
+	(dx 26) (dy 97)
+	(color '(255 255 255)))
     (list
-     (count-rgb-pixel< color (list x0 y0 w h))
-     (count-rgb-pixel< color (list (+ x0 dx) y0 w h))
-     (count-rgb-pixel< color (list x0 (+ y0 dy) w h))
-     (count-rgb-pixel< color (list (+ x0 dx) (+ y0 dy) w h)))))
+     (count-rgb-pixel color (list x0 y0 w h))
+     (count-rgb-pixel color (list (+ x0 dx) y0 w h))
+     (count-rgb-pixel color (list x0 (+ y0 dy) w h))
+     (count-rgb-pixel color (list (+ x0 dx) (+ y0 dy) w h)))))
 
+
+;; (defun wie-viel-<55 ()
+;;   "accumulate pixel < 55 in boxy"
+;;   (let ((x0 220)
+;; 	(y0 828)
+;; 	(w 17)
+;; 	(h 28)
+;; 	(dx 17)
+;; 	(dy 78)
+;; 	(color '(55 55 55)))
+;;     (list
+;;      (count-rgb-pixel< color (list x0 y0 w h))
+;;      (count-rgb-pixel< color (list (+ x0 dx) y0 w h))
+;;      (count-rgb-pixel< color (list x0 (+ y0 dy) w h))
+;;      (count-rgb-pixel< color (list (+ x0 dx) (+ y0 dy) w h)))))
+ 
 ;; TODO DYNAMIC SCOPING BENUTZUNG
-(defun wie-viel-55-in-x (x) 
+(defun wie-viel-<55-in-x (x) 
   (let ((*shot-path* (merge-pathnames (format nil "shot~a.png" x)
 				      *working-dir*)))
     (shot-read)
     (wie-viel-55)))
 
+(defun wie-viel-255-in-x (x) 
+  (let ((*shot-path* (merge-pathnames (format nil "shot~a.png" x)
+				      *working-dir*)))
+    (shot-read)
+    (wie-viel-255)))
+
 ;;2528 2209 0301 2409 1406
 
 ;;; TODO alist plist substitute etc? array?!
-(defparameter *pin-seq* (list 68 87 90 94 80 102 58 107 100 101))
+;; (defparameter *pin-seq* (list 68 87 90 94 80 102 58 107 100 101))
 
-(defparameter *pin-seq* '((68 . 1) (87 . 2) (90 . 3) (94 . 4) (80 . 5)
-			  (102 . 6) (58 . 7) (107 . 8) (100 . 9) (101 . 0)))
+;; (defparameter *pin-seq* '((68 . 1) (87 . 2) (90 . 3) (94 . 4) (80 . 5)
+;; 			  (102 . 6) (58 . 7) (107 . 8) (100 . 9) (101 . 0)))
 
 ;; scanned-boxy-pixel gefunden
 ;; < 55
@@ -312,6 +331,21 @@
 ;; +---+---+---+---+---+---+---+---+----+----+
 ;; |68 |87 |90 | 94|80 |102|58 |107| 100|101 |
 ;; +---+---+---+---+---+---+---+---+----+----+
+
+
+(defparameter *pin-seq* (list 232 2 349 338 5 6 7 8 9 403))
+
+(defparameter *pin-seq* '((232 . 1) (2 . 2) (349 . 3) (338 . 4) (5 . 5)
+			  (6 . 6) (7 . 7) (8 . 8) (9 . 9) (403 . 0)))
+
+;; scanned-boxy-pixel gefunden
+;; = 255
+;; +---+---+---+---+---+---+---+---+---+---+
+;; |1  |2  |3  |4  |5  |6  |7  |8  |9  |0  |
+;; +---+---+---+---+---+---+---+---+---+---+
+;; |232|   |349|338|   |   |   |   |   |403|
+;; +---+---+---+---+---+---+---+---+---+---+
+
 
 
 (defun que-pin (bank-slot lst)

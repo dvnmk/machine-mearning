@@ -110,6 +110,14 @@
   (let ((cmd (format "(fun-kiste-save '%s)" kiste-name)))
     (2slime cmd)))
 
+(fset 'select-order
+   [f3 ?\( ?m ?  ?* ?s ?e ?l ?e ?c ?t ?- ?o ?r ?d ?e ?r ?* ?\C-e return])
+(global-set-key (kbd "s-7") #'select-order )
+
+(fset 'paymethode
+   [f3 ?\( ?m ?  ?* ?p ?a ?y ?m ?e ?t ?h ?o ?d ?e ?* ?\C-e return])
+(global-set-key (kbd "s-8") #'paymethode)
+
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
   "TODO"

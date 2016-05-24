@@ -35,7 +35,7 @@
 ** TODO in qt-wrapper disable the mark set feature
 ** DONE mode.el record-start -> toggle
 ** TODO INFO CAPSULATE
-** TODO PIN CODE CRACK
+** DONE PIN CODE CRACK
 ** DONE fun-kiste als datei save in lisp file as txt format
 hinzufuegen, stream
 

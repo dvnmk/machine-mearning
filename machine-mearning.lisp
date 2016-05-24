@@ -68,6 +68,10 @@
   "Open the auction app"
   (cmd "activator send kr.co.auction.AuctionBrowser"))
 
+(defun 11st ()
+  "Open the 11st app"
+  (cmd "activator send kr.co.11st.mobile"))
+
 (defun sketchbook ()
   (cmd "activator send com.autodesk.ios.SketchBookPro3"))
 

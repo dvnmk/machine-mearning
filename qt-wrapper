@@ -9,5 +9,9 @@
 3 ; MACH-MAL *FUN-KISTE*
 4 ; RECORD-KISTE RESET
 
+7 ; (m *select-order*) aus Emacs macro
+8 ; (m *paymethode*) aus Emacs macro
+
 ;; LOG
+
 
