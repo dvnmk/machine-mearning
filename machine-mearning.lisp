@@ -64,6 +64,10 @@
   "Open home springboard"
   (cmd "activator send libactivator.system.first-springboard-page"))
 
+(defun h ()
+  "#'home aka #'h"
+  (home))
+
 (defun auction ()
   "Open the auction app"
   (cmd "activator send kr.co.auction.AuctionBrowser"))
@@ -443,6 +447,8 @@
 
 (defun bottom ()
   (cmd "activator send com.rthakrar.taptoscrollforactivator.bottom"))
+(defun bot  ()
+  (bottom))
 
 (defun top ()
   (cmd "activator send com.rthakrar.taptoscrollforactivator.top"))

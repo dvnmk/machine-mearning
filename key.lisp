@@ -91,7 +91,7 @@
 			     (collect (list x y))))
 	    into r at beginning)
 	  (finally (progn (push '((239 1088) (557 1088)) r)
-			  (return (nreverse r)))))))
+			  (return (nreverse R)))))))
 
 
 (defun loch-finden-bankpay ()
@@ -238,7 +238,7 @@
 
 ;; TODO kali  m/ lezte row
 ;; ^ shift, ! bs $ num @ kbd #\spaceko spc / ok
-;; shift not included
+;; TODO shift not included
 (defparameter *enkey-seq* "qwertyuiopasdfghjklzxcvbnm!$@    /")
 
 (defun wozu-nth-btn-enkey (x)
@@ -333,7 +333,7 @@
 ;; +---+---+---+---+---+---+---+---+----+----+
 
 
-(defparameter *pin-seq* (list 232 2 349 338 5 6 7 8 9 403))
+;; (defparameter *pin-seq* (list 232 2 349 338 5 6 7 8 9 403))
 
 (defparameter *pin-seq* '((232 . 1) (2 . 2) (349 . 3) (338 . 4) (5 . 5)
 			  (6 . 6) (7 . 7) (8 . 8) (9 . 9) (403 . 0)))
@@ -346,8 +346,6 @@
 ;; |232|   |349|338|   |   |   |   |   |403|
 ;; +---+---+---+---+---+---+---+---+---+---+
 
-
-
 (defun que-pin (bank-slot lst)
   "query pin of bank-slot durch geheim, lst ist wie (24 09) "
   (let*  ((x (car lst))
@@ -358,7 +356,7 @@
 	  (format nil "~d" (second pin1)))))
 
 (defun finde-auf-pin-seq (lst)
-  "find die nummer auf pin-seq from wie-viel-55"
+  "find die nummer auf pin-seq from wie-viel-255"
   (mapcar (lambda (x) (cdr (assoc x *pin-seq*)))
 	  lst))
 
@@ -370,8 +368,7 @@
 	 (b1 (format nil "~d" (nth 3 lst)))
 	 (res (list (concatenate 'string a0 a1) (concatenate 'string b0 b1))))
     (format t "~a ; OCR-gt" res)
-    (mapcar #'parse-integer res)
-))
+    (mapcar #'parse-integer res)))
 
 (defparameter *gefunden-pin* nil)
 
@@ -383,6 +380,7 @@
     (shot-sym-down)
     (shot-read)
     (setf *gefunden-pin* (que-pin bank-slot (parse-list4-list2
-					     (finde-auf-pin-seq (wie-viel-55)))))))
+					     (finde-auf-pin-seq (wie-viel-255)))))))
 
 ;; (crack-secupad-y-type *gefunden-pin*)
+

@@ -21,8 +21,14 @@
 (defparameter *shot-resize-path*
   (merge-pathnames "shot-resize.png" *working-dir*))
 
-(defparameter *remote-file*
-  "mobile@localhost:/var/mobile/Media/DCIM/100APPLE/shot.png")
+
+(defparameter *remote-dir-path* "/var/mobile/Media/DCIM/101APPLE/")
+
+(defparameter *remote-file-path* (concatenate 'string *remote-dir-path* "shot.png"))
+
+(defparameter *remote-file-url*
+  (concatenate 'string "mobile@localhost:" *remote-file-path*))
+
 
 ;; TODO (declaim)
 ;; (declaim (type opticl:8-bit-rgb-image *shot-img*)) ; TODO
@@ -32,14 +38,15 @@
 ;; pathname TODO
 (defun shot-symlink ()
   "Make symbolic link of newest made file."
-  (cmd "ln -fs $(ls -rt1 /var/mobile/Media/DCIM/100APPLE |tail -1) /var/mobile/Media/DCIM/100APPLE/shot.png"))
+  (let ((c (format nil "ln -fs $(ls -rt1 ~s | tail -1) ~s" *remote-dir-path* *remote-file-path*)))
+    (cmd c)))
 
 ;; pathname TODO
 (defun shot-down ()
   (external-program:run "rsync"
 		   `("-v" "-e ssh \'-p 2000\'" "-L"
 		     ;; "--progress"
-		     ,*remote-file*
+		     ,*remote-file-url*
 		     ,(directory-namestring *working-dir*))
 		   :wait t :output t))
 

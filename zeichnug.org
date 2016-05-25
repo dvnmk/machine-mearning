@@ -36,14 +36,14 @@
 ** DONE mode.el record-start -> toggle
 ** TODO INFO CAPSULATE
 ** DONE PIN CODE CRACK
-** DONE fun-kiste als datei save in lisp file as txt format
-hinzufuegen, stream
+** DONE fun-kiste als datei save in lisp file as txt format hinzufuegen, stream
 
 ** TODO systematische drucken od. drag machen. via fun?		       :DENK:
 ** TODO kiste-mod qkiste zu macro, weil um die quote zu weg
 ** TODO enkey debug
 ** TODO disconnected DEBUG 
 ** TODO multiple ssh connection fue spontan stouch?		       :DENK:
+** TODO (roll-selector 2)
 
 * HISTORY
 ** eigentlich wollte ich alle prozess automatisch zu machen. d.h. wenn man wie machine arbeitet, dann kommt geld. so das system ist es. Dann, mache ich eine machine dafuer via computer program. dann mann kann nur das system benutzen, ohne die physikalische, zeitliche arbeiten. so kommt die AI? k.a. aber, diese arbeit wird die zsene zeigen. Wie kann man  
@@ -54,7 +54,7 @@ hinzufuegen, stream
 * SYNOPSIS
 ** gandalf
 ** (init)
-*** (fit-again)
+*** (fit-again
 ** (connect)
 ** (disconnect)
 
