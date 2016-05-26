@@ -118,6 +118,16 @@
    [f3 ?\( ?m ?  ?* ?p ?a ?y ?m ?e ?t ?h ?o ?d ?e ?* ?\C-e return])
 (global-set-key (kbd "s-8") #'paymethode)
 
+(fset '11st
+   [f3 ?\( ?1 ?1 ?s ?t ?\C-e return])
+(global-set-key (kbd "s-6") #'11st)
+
+(global-set-key (kbd "<s-escape>") #'slime-interrupt)
+
+(fset 'venga
+   [f3 ?\( ?m ?  ?* ?v ?e ?n ?g ?a ?* ?\C-e return])
+(global-set-key (kbd "s-9") #'venga)
+
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
   "TODO"

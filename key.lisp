@@ -335,15 +335,15 @@
 
 ;; (defparameter *pin-seq* (list 232 2 349 338 5 6 7 8 9 403))
 
-(defparameter *pin-seq* '((232 . 1) (2 . 2) (349 . 3) (338 . 4) (5 . 5)
-			  (6 . 6) (7 . 7) (8 . 8) (9 . 9) (403 . 0)))
+(defparameter *pin-seq* '((232 . 1) (360 . 2) (349 . 3) (338 . 4) (5 . 5)
+			  (400 . 6) (267 . 7) (417 . 8) (9 . 9) (403 . 0)))
 
 ;; scanned-boxy-pixel gefunden
 ;; = 255
 ;; +---+---+---+---+---+---+---+---+---+---+
 ;; |1  |2  |3  |4  |5  |6  |7  |8  |9  |0  |
 ;; +---+---+---+---+---+---+---+---+---+---+
-;; |232|   |349|338|   |   |   |   |   |403|
+;; |232|360|349|338|   |400|267|417|   |403|
 ;; +---+---+---+---+---+---+---+---+---+---+
 
 (defun que-pin (bank-slot lst)
@@ -352,7 +352,7 @@
 	  (y (cadr lst))
 	  (pin0 (nth x bank-slot))
 	  (pin1 (nth y bank-slot)))
-    (list (format nil "~d" (first pin0))
+    (list (format nil "~2,'0d" (first pin0))
 	  (format nil "~d" (second pin1)))))
 
 (defun finde-auf-pin-seq (lst)

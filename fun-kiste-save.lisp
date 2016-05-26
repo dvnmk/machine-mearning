@@ -9,16 +9,16 @@
   '((PROGN (SLEEP 0) (STOUCH (LIST 151.0 150.0 152.0 500.0 0.1)))))
 
 (DEFPARAMETER *SELECT-ORDER*
-  '((PROGN (SLEEP 0.4) (STOUCH (LIST 63.5 498.5)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 31.5 176.0)))
-    (PROGN (SLEEP 2) (STOUCH (LIST 22.5 122.5)))
+  '((PROGN (SLEEP 1) (STOUCH (LIST 63.5 498.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 31.5 176.0)))
+    (PROGN (SLEEP 2.4) (STOUCH (LIST 22.5 122.5)))
     (PROGN (SLEEP 0) (STOUCH (LIST 297.0 41.0)))))
 
 (DEFPARAMETER *paymethode*
-  '((PROGN (SLEEP 1.4) (STOUCH (LIST 161.0 416.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 162.0 469.5)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 26.5 411.5)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 157.5 396.0)))
+  '((PROGN (SLEEP 2) (STOUCH (LIST 161.0 416.0)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 162.0 469.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 26.5 411.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 157.5 396.0)))
     (PROGN (SLEEP 2.4) (STOUCH (LIST 241.0 131.0)))
 
     (PROGN (SLEEP 2.2) (STOUCH (LIST 239.5 466.5)))
@@ -50,14 +50,14 @@
     (progn (sleep 0) (stouch (list 200.5 193.5)))))
 
 (DEFPARAMETER *konto-nu-SH*
-  '((progn (sleep 0.8) (type-string-secupad (concatenate 'string *my-sh* "/")) )
-    (progn (sleep 1.2) (crack-secupad))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 165.0 133.0)))
+  '((progn (sleep 1) (type-string-secupad (concatenate 'string *my-sh* "/")) )
+    (progn (sleep 2) (crack-secupad))
+    (PROGN (SLEEP 1.2) (STOUCH (LIST 165.0 133.0)))
     (progn (sleep 0) (bottom))))
 
 (DEFPARAMETER *konto-nu-ha*
-  '((progn (sleep 0.8) (type-string-secupad (concatenate 'string *my-ha* "/")) )
-    (progn (sleep 1.2) (crack-secupad))
+  '((progn (sleep 1) (type-string-secupad (concatenate 'string *my-ha* "/")) )
+    (progn (sleep 1.6) (crack-secupad))
     (PROGN (SLEEP 0.8) (STOUCH (LIST 165.0 133.0)))
     (progn (sleep 0) (bottom))
     ))
@@ -65,7 +65,7 @@
 (DEFPARAMETER *KONTO-PIN*
   '((progn (sleep 0.8) (type-string-secupad (concatenate 'string *my-konto-pin* "/")))
     (progn (sleep 1.2) (crack-secupad))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 152.0 166.5)))
+    (PROGN (SLEEP 0) (STOUCH (LIST 152.0 166.5)))
 ;    (progn (sleep 0) (bottom))
     ))
 
@@ -78,33 +78,24 @@
 
 (defparameter *konto-haber*
   '((progn (sleep 1.2) (type-string-enkey "qkrahrdud/"))
-    (progn (sleep 0) (m *enkey-lang-ko*)))
-    "allgemeine schreibe hard-coded name")
+    (progn (sleep 1.2) (m *enkey-lang-ko*))
+    (progn (sleep 0) (stouch (list 191.0 203.5)))))
 
 (DEFPARAMETER *MIN-NUM*
   '((progn (sleep 0.6) (type-string-secupad (concatenate 'string (cadr *my-min*) "/")))
-    (progn (sleep 3) (crack-secupad))
+    (progn (sleep 2.2) (crack-secupad))
     (progn (sleep 0.6) (type-string-secupad (concatenate 'string (car *my-min*) "/")))
     (progn (sleep 1.2) (crack-secupad))
     (PROGN (SLEEP 0.2) (STOUCH (LIST 152.5 303.5)))
   ;  (progn (sleep 0) (bottom))
     )) 
 
-
 (defparameter *fill-sh*
   '((progn (sleep 2) (stouch (list 157.5 429.5)))
     (progn (sleep 1.8) (m *min-num*))
-    (progn (sleep 1.5) (m *konto-haber*))
-    (progn (sleep 1.5) (m *konto-pin*))
+    (progn (sleep 2) (m *konto-haber*))
+    (progn (sleep 4) (m *konto-pin*))
     (progn (sleep 0) (m *konto-nu-sh*))))
-
-
-(defparameter *fill-ha*
-  '((progn (sleep 2) (stouch (list 157.5 429.5)))
-    (progn (sleep 1.8) (m *min-num*))
-    (progn (sleep 0.8) (m *konto-haber*))
-    (progn (sleep 1.5) (m *konto-pin*))
-    (progn (sleep 0) (m *konto-nu-ha*))))
 
 (defparameter *select-secucard*
   '((progn (sleep 0.8) (stouch (list 220.5 163.0)))
@@ -117,8 +108,7 @@
     (progn (sleep 0.4) (stouch (list 221.0 211.0)))
     (progn (sleep 0.2) (type-string-secupad (concatenate 'string *my-sh-pin* "/")))
     (PROGN (SLEEP 0.8) (crack-secupad))
-    (progn (sleep 0) (m *select-secucard*))
-))
+    (progn (sleep 0) (m *select-secucard*))))
 
 (DEFPARAMETER *pin-ha*
   '((progn (sleep 1) (stouch (list 219.5 212.5)))
@@ -131,9 +121,9 @@
 ;; secucard cracking kiste
 (DEFPARAMETER *crack-pin-sh*
   '(
-    (progn (sleep 0.8) (stouch (list 165.5 127.5)))
-    (progn (sleep 0.8) (stouch (list 163.0 135.5)))
-    (progn (sleep 0.8) (stouch (list 94.5 318.5)))
+    (progn (sleep 1) (stouch (list 165.5 127.5)))
+    (progn (sleep 1) (stouch (list 163.0 135.5)))
+    (progn (sleep 1) (stouch (list 94.5 318.5)))
     (progn (sleep 0.5) (type-string-numpad (cadr *gefunden-pin*)))
     (progn (sleep 0.5) (stouch (list 216.0 283.5)))
     (progn (sleep 0.5) (type-string-numpad (car *gefunden-pin*)))
@@ -143,11 +133,13 @@
 
 
 (DEFPARAMETER *pay-confirm*
-  '((progn (sleep 3) (stouch (list 157.5 219.5)))
+  '((progn (sleep 3) (m *ok*))
+    (progn (sleep 3) (stouch (list 163.5 222.0)))
     (progn (sleep 0) (type-string-bankpay (concatenate 'string
 						       *confirm-code*
 						       "/")))
-    (progn (sleep 0) (crack-bankpay))
+    (progn (sleep 1.2) (crack-bankpay))
+    (progn (sleep 0) (stouch (list  161.5 128.5)))
     ))
  
 
@@ -167,21 +159,15 @@
 ;; (m *crack-pin-ha*)
 ;; (m *pay-confirm*)
 
-;; zwischen zeit kontroled progn
-(defun venga ()
-  "this is not a thread progn"
-  (progn
-    (m *select-order*)
-    (sleep 1) (m *paymethode*)
-    ;; (sleep 1) (m *select-bank-sh*)
-    (sleep 1) (m *fill-sh*)
-    (sleep 1) (m *fill-ha*)
-    (sleep 1) (m *send*)
-    (sleep 1) (m *pin-sh*)
-    (sleep 1) (m *pin-ha*)
-    (sleep 1) (m *crack-pin-sh*)
-    (sleep 1) (m *pay-confirm*)
-    ))
+(defparameter *venga*
+  '(
+    (progn (sleep 2) (m *pay-confirm*))
+    (progn (sleep 2) (m *crack-pin-sh*))
+    (progn (sleep 2) (m *pin-sh*))
+    (progn (sleep 4) (m *fill-sh*))
+    (progn (sleep 3) (m *select-bank-sh*))
+    (progn (sleep 3) (m *paymethode*))
+    (progn (sleep 0) (m *select-order*))))
 
 (DEFPARAMETER *FOTOS-LOSCH*
   '((PROGN (SLEEP 0.6) (STOUCH (LIST 160.5 484.0)))
