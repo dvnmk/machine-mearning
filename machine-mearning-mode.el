@@ -128,6 +128,15 @@
    [f3 ?\( ?m ?  ?* ?v ?e ?n ?g ?a ?* ?\C-e return])
 (global-set-key (kbd "s-9") #'venga)
 
+(fset 'ok
+   [f3 ?\( ?m ?  ?* ?o ?k ?* ?\C-e return])
+(global-set-key (kbd "s-0") #'ok)
+
+
+(fset 'zuruck
+   [f3 ?\( ?m ?  ?* ?z ?u ?r ?u ?c ?k ?* ?\C-e return])
+(global-set-key (kbd "s--") #'zuruck)
+
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
   "TODO"

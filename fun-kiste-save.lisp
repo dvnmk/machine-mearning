@@ -8,6 +8,20 @@
 (DEFPARAMETER *UP*
   '((PROGN (SLEEP 0) (STOUCH (LIST 151.0 150.0 152.0 500.0 0.1)))))
 
+
+(defun back ()
+  (mach *back*))
+
+(defun ok ()
+  (mach *ok*))
+
+(defun up ()
+  (mach *up*))
+
+(defun down ()
+  (mach *down*))
+
+
 (DEFPARAMETER *SELECT-ORDER*
   '((PROGN (SLEEP 1) (STOUCH (LIST 63.5 498.5)))
     (PROGN (SLEEP 1) (STOUCH (LIST 31.5 176.0)))
@@ -18,22 +32,22 @@
   '((PROGN (SLEEP 2) (STOUCH (LIST 161.0 416.0)))
     (PROGN (SLEEP 1) (STOUCH (LIST 162.0 469.5)))
     (PROGN (SLEEP 1) (STOUCH (LIST 26.5 411.5)))
-    (PROGN (SLEEP 1) (STOUCH (LIST 157.5 396.0)))
+    (PROGN (SLEEP 1.4) (STOUCH (LIST 157.5 396.0)))
     (PROGN (SLEEP 2.4) (STOUCH (LIST 241.0 131.0)))
 
-    (PROGN (SLEEP 2.2) (STOUCH (LIST 239.5 466.5)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 234.5 95.0)))
+    (progn (sleep 2.4) (bottom))
+    (PROGN (SLEEP 0.7) (STOUCH (LIST 237.0 279.5)))
+    (PROGN (SLEEP 0.5) (STOUCH (LIST 35.0 212.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 33.5 173.5)))
 
-    (PROGN (SLEEP 0.7) (STOUCH (LIST 239.5 196.5)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 34.0 124.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 31.5 86.0)))
-    (PROGN (SLEEP 0.8) (bottom))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 245.0 374.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 51.0 300.5)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 248.5 119.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 52.5 68.5)))
     (PROGN (SLEEP 0.7) (up-1))
     (PROGN (SLEEP 0) (bottom))))
 
 ;; TODO roller-selector fun?
-(defparameter *select-bank-sh*
+(defparameter *bank-select-sh*
   '((progn (sleep 0.4) (stouch (list 281.0 402.0)))
     (progn (sleep 0.4) (stouch (list 161.0 532.5)))
     (progn (sleep 1.4) (stouch (list 161.0 554.5)))
@@ -41,7 +55,7 @@
     (progn (sleep 0.6) (stouch (list  164.5 445.5 159.0 548.5  0.2)))
     (progn (sleep 0) (stouch (list 200.5 193.5)))))
 
-(defparameter *select-bank-ha*
+(defparameter *bank-select-ha*
   '((progn (sleep 0.4) (stouch (list 282.0 400.5)))
     (progn (sleep 0.4) (stouch (list 158.5 484.5)))
     (progn (sleep 1.4) (stouch (list 158.5 484.5)))
@@ -51,8 +65,8 @@
 
 (DEFPARAMETER *konto-nu-SH*
   '((progn (sleep 1) (type-string-secupad (concatenate 'string *my-sh* "/")) )
-    (progn (sleep 2) (crack-secupad))
-    (PROGN (SLEEP 1.2) (STOUCH (LIST 165.0 133.0)))
+    (progn (sleep 3) (crack-secupad))
+    (PROGN (SLEEP 1.4) (STOUCH (LIST 165.0 133.0)))
     (progn (sleep 0) (bottom))))
 
 (DEFPARAMETER *konto-nu-ha*
@@ -65,9 +79,7 @@
 (DEFPARAMETER *KONTO-PIN*
   '((progn (sleep 0.8) (type-string-secupad (concatenate 'string *my-konto-pin* "/")))
     (progn (sleep 1.2) (crack-secupad))
-    (PROGN (SLEEP 0) (STOUCH (LIST 152.0 166.5)))
-;    (progn (sleep 0) (bottom))
-    ))
+    (PROGN (SLEEP 0) (STOUCH (LIST 152.0 166.5)))    ))
 
 (defparameter *enkey-lang-ko*
   '((progn (sleep 0) (stouch (list 60.0 543.0 63.5 447.0 0.3)))))
@@ -86,16 +98,15 @@
     (progn (sleep 2.2) (crack-secupad))
     (progn (sleep 0.6) (type-string-secupad (concatenate 'string (car *my-min*) "/")))
     (progn (sleep 1.2) (crack-secupad))
-    (PROGN (SLEEP 0.2) (STOUCH (LIST 152.5 303.5)))
-  ;  (progn (sleep 0) (bottom))
-    )) 
+    (PROGN (SLEEP 0.2) (STOUCH (LIST 152.5 303.5))))) 
 
 (defparameter *fill-sh*
   '((progn (sleep 2) (stouch (list 157.5 429.5)))
     (progn (sleep 1.8) (m *min-num*))
     (progn (sleep 2) (m *konto-haber*))
     (progn (sleep 4) (m *konto-pin*))
-    (progn (sleep 0) (m *konto-nu-sh*))))
+    (progn (sleep 3.4) (m *konto-nu-sh*))
+    (progn (sleep 0) (m *bank-select-sh*))))
 
 (defparameter *select-secucard*
   '((progn (sleep 0.8) (stouch (list 220.5 163.0)))
@@ -160,21 +171,20 @@
 ;; (m *pay-confirm*)
 
 (defparameter *venga*
-  '(
+  '((progn (sleep 22) (m *zuruck*))
     (progn (sleep 2) (m *pay-confirm*))
-    (progn (sleep 2) (m *crack-pin-sh*))
+    (progn (sleep 2.4) (m *crack-pin-sh*))
     (progn (sleep 2) (m *pin-sh*))
-    (progn (sleep 4) (m *fill-sh*))
-    (progn (sleep 3) (m *select-bank-sh*))
+    (progn (sleep 3.4) (m *fill-sh*))
     (progn (sleep 3) (m *paymethode*))
     (progn (sleep 0) (m *select-order*))))
 
 (DEFPARAMETER *FOTOS-LOSCH*
-  '((PROGN (SLEEP 0.6) (STOUCH (LIST 160.5 484.0)))
-    (PROGN (SLEEP 0.6) (STOUCH (LIST 295.0 545.0)))
-    (PROGN (SLEEP 0.6) (STOUCH (LIST 280.5 89.5)))
-    (PROGN (SLEEP 0.6) (STOUCH (LIST 263.5 43.0)))
-    (progn (sleep 0.6) (stouch (list 85.5 540.5)))
+  '((PROGN (SLEEP 0.8) (STOUCH (LIST 160.5 484.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 295.0 545.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 280.5 89.5)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 263.5 43.0)))
+    (progn (sleep 1.6) (stouch (list 85.5 540.5)))
     (progn (sleep 0) (fotos))))
 
 (DEFPARAMETER *ZURUCK*
@@ -203,3 +213,30 @@
     (PROGN (SLEEP 2.112) (STOUCH (LIST 165.5 556.5 166.0 508.5 0.624)))
     (PROGN (SLEEP 5.348) (STOUCH (LIST 168.0 550.5 171.5 512.0 0.7)))
     (PROGN (SLEEP 0) (STOUCH (LIST 207.0 195.5))))) 
+
+(DEFPARAMETER *ZURUCK*
+  '((PROGN (SLEEP 3.4) (STOUCH (LIST 160.5 323.5)))
+    (PROGN (SLEEP 1.8) (STOUCH (LIST 227.5 322.5)))
+    (PROGN (SLEEP 1.8) (STOUCH (LIST 242.0 432.0)))
+    (PROGN (SLEEP 1.8) (STOUCH (LIST 288.5 328.5)))
+    (PROGN (SLEEP 1.8) (STOUCH (LIST 166.5 494.0)))
+    (PROGN (SLEEP 4) (STOUCH (LIST 196.5 320)))
+    (PROGN (SLEEP 1.2) (STOUCH (LIST 261.0 370)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 276.0 354.5 258.5 179.0 1)))
+
+    (progn (sleep 1.2)(stouch (list 289.0 328.0)))
+    (progn (sleep 1.2) (stouch (list 160.5 515.0)))
+    (progn (sleep 2.2) (stouch (list 221.0 236.5)))
+    (PROGN (SLEEP 3) (STOUCH (LIST 162.5 139.5)))
+    (PROGN (SLEEP 0) (STOUCH (LIST 25.5 43.0))))) 
+
+
+(DEFPARAMETER *ARM*
+  '((PROGN (SLEEP 1.2) (STOUCH (LIST 230.0 326.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 305.5 107.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 304.5 142.5)))
+    (PROGN (SLEEP 5) (STOUCH (LIST 163.0 472.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 166.0 148.5)))
+    (progn (sleep 1) (bottom))
+    (PROGN (SLEEP 1) (STOUCH (LIST 288.5 112.0)))
+    (progn (sleep 0) (bottom)))) 

@@ -289,33 +289,44 @@
 			       (* (nth 5 lst) *ratio*)
 			       delta
 			       ))
-	 (msg (format nil "~A" convrted-poen)))
+	 (msg (format nil "~A" convrted-poen))
+	 (res (cddr convrted-poen))
+	 (res-string (format nil "~{~a~^ ~}" res)))
     (progn  (if *record-status* (progn
 				  (push convrted-poen *record-kiste*)
 				  (setf msg (concatenate 'string
 							 msg
-							 " <REC>"))))
-	    (swipe (cddr convrted-poen))
-	    (insert-log-emacs msg "darkcyan") ; debug
+							 " <REC>"))
+				  (insert-log-emacs msg "darkcyan")))
+	    (swipe res)
+	    ;; (insert-log-emacs msg "darkcyan") ; debug
 	    (swank:eval-in-emacs 
-	     `(message "DRAG-passiert: %s " ,msg)))))
+	     `(message "DRAG-passiert: %s " ,msg))
+	    (swank:eval-in-emacs
+	     `(osx-lib-copy-to-clipboard ,res-string)))))
 
-
+;;; TODO #'insert-log-emacs ein/aus
+;;; falls nur record status, log ein
 (defun  click-passiert (lst)
   "(ts ts x y)"
-  (let* ((convrted-poen-lst (list (nth 0 lst)
+  (let* ((convrted-poen (list (nth 0 lst)
 				  (nth 1 lst)
 				  (* (nth 2 lst) *ratio*) 
 				  (* (nth 3 lst) *ratio*)))
-	 (msg (format nil "~A" convrted-poen-lst)))			; ts
-    (progn (if *record-status* (progn (push  convrted-poen-lst *record-kiste*)
+	 (msg (format nil "~A" convrted-poen))
+	 (res (cddr convrted-poen))
+	 (res-string (format nil "~{~a~^ ~}" res)))		; ts
+    (progn (if *record-status* (progn (push  convrted-poen *record-kiste*)
 				      (setf msg (concatenate 'string
 							 msg
-							 " <REC>"))))
-	   (stouch (cddr convrted-poen-lst))	
-	   (insert-log-emacs msg "darkblue")	; debug
+							 " <REC>"))
+				      (insert-log-emacs msg "darkblue")))
+	   (stouch res)	
+	   ;; (insert-log-emacs msg "darkblue")	; debug
 	   (swank:eval-in-emacs
-	    `(message "CLICK-passiert: %s" ,msg )))))
+	    `(message "CLICK-passiert: %s" ,msg ))
+	   (swank:eval-in-emacs
+	    `(osx-lib-copy-to-clipboard ,res-string)))))
 
 
 ;; *record-kiste* zu *fun-kiste* conversion
@@ -427,17 +438,6 @@
 (defun fun-kiste-save-load ()
   (load *fun-kiste-save-path*))
 
-(defun back ()
-  (mach *back*))
-
-(defun ok ()
-  (mach *ok*))
-
-(defun up ()
-  (mach *up*))
-
-(defun down ()
-  (mach *down*))
 
 (defun up-1 ()
   (cmd "activator send com.rpetrich.superscroller.up"))
@@ -456,6 +456,16 @@
 (defun middle ()
   (cmd "activator send com.rthakrar.taptoscrollforactivator.middle"))
 
+(defun noti ()
+  (cmd "activator send libactivator.system.activate-notification-center"))
+									  
+(defun ctl ()
+  (cmd "activator send libactivator.system.activate-control-center"))
+									  
+(defun swt ()
+  (cmd "activator send libactivator.system.activate-switcher"))
 
+(defun sh ()
+  (cmd "activator send com.shinhan.sbank"))
 ;;
 
