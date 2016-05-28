@@ -137,6 +137,12 @@
    [f3 ?\( ?m ?  ?* ?z ?u ?r ?u ?c ?k ?* ?\C-e return])
 (global-set-key (kbd "s--") #'zuruck)
 
+(fset 'shot-sym-down
+   [f3 ?\( ?s ?h ?o ?t ?- ?s ?y ?m ?- ?d ?o ?w ?n ?\C-e return])
+(global-set-key (kbd "s-+") #'shot-sym-down)
+
+
+
 ;;;###autoload
 (define-minor-mode machine-mearning-mode
   "TODO"

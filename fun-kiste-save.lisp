@@ -179,14 +179,6 @@
     (progn (sleep 3) (m *paymethode*))
     (progn (sleep 0) (m *select-order*))))
 
-(DEFPARAMETER *FOTOS-LOSCH*
-  '((PROGN (SLEEP 0.8) (STOUCH (LIST 160.5 484.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 295.0 545.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 280.5 89.5)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 263.5 43.0)))
-    (progn (sleep 1.6) (stouch (list 85.5 540.5)))
-    (progn (sleep 0) (fotos))))
-
 (DEFPARAMETER *ZURUCK*
   '((PROGN (SLEEP 2.489) (STOUCH (LIST 239.5 330.0)))
     (PROGN (SLEEP 2.571) (STOUCH (LIST 33.0 341.5)))

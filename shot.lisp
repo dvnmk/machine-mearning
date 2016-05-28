@@ -27,7 +27,7 @@
 (defparameter *remote-file-path* (concatenate 'string *remote-dir-path* "shot.png"))
 
 (defparameter *remote-file-url*
-  (concatenate 'string "mobile@localhost:" *remote-file-path*))
+  (concatenate 'string "mobile@192.168.0.3:" *remote-file-path*))
 
 
 ;; TODO (declaim)
@@ -42,18 +42,21 @@
     (cmd c)))
 
 ;; pathname TODO
+;; wireless y wire
 (defun shot-down ()
   (external-program:run "rsync"
-		   `("-v" "-e ssh \'-p 2000\'" "-L"
-		     ;; "--progress"
-		     ,*remote-file-url*
-		     ,(directory-namestring *working-dir*))
-		   :wait t :output t))
+			`("-v" "-e ssh"
+			       ;; "\' -p 2000\'"
+			       "-L"
+			       ;; "--progress"
+			       ,*remote-file-url*
+			       ,(directory-namestring *working-dir*))
+			:wait t :output t))
 
 (defun shot-sym-down ()
   (progn
     (shot-shot)
-    (sleep 0.5)
+    (sleep 0.6)
     (shot-symlink)
     (sleep 0.8)
     (shot-down)

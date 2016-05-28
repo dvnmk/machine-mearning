@@ -8,7 +8,9 @@
 (defun connect ()
   (progn
     (defparameter *ssh* (external-program:start "ssh"
-					'("-t" "-t" "mobile@localhost" "-p" "2000")
+						'("-t" "-t" "mobile@192.168.0.3"
+						  ;"-p" "2000"
+						  )
 					:output t :input :stream 
 								 ;; :wait nil
 					;; :sharing :external
@@ -59,6 +61,18 @@
 (defun fotos ()
   "Open the Foto app"
   (cmd "activator send com.apple.mobileslideshow"))
+
+
+(DEFPARAMETER *FOTOS-LOSCH*
+  '((PROGN (SLEEP 0.8) (STOUCH (LIST 160.5 484.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 295.0 545.0)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 280.5 89.5)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 263.5 43.0)))
+    (progn (sleep 1.6) (stouch (list 85.5 540.5)))
+    (progn (sleep 0) (fotos))))
+
+(defun fotos-loschen ()
+  (m *fotos-losch*))
 
 (defun home ()
   "Open home springboard"
