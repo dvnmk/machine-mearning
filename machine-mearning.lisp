@@ -65,7 +65,7 @@
   (cmd "activator send com.apple.mobileslideshow"))
 
 
-(DEFPARAMETER *FOTOS-LOSCH*
+(DEFPARAMETER *garbage-collector*
   '((PROGN (SLEEP 1) (STOUCH (LIST 160.5 484.0)))
     (PROGN (SLEEP 1) (STOUCH (LIST 295.0 545.0)))
     (PROGN (SLEEP 1) (STOUCH (LIST 280.5 89.5)))
@@ -73,8 +73,8 @@
     (progn (sleep 1.6) (stouch (list 85.5 540.5)))
     (progn (sleep 0) (fotos))))
 
-(defun fotos-loschen ()
-  (m *fotos-losch*))
+(defun g-c ()
+  (m *garbage-collector*))
 
 (defun home ()
   "Open home springboard"

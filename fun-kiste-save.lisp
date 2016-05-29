@@ -35,14 +35,14 @@
     (PROGN (SLEEP 1.4) (STOUCH (LIST 157.5 396.0)))
     (PROGN (SLEEP 2.4) (STOUCH (LIST 241.0 131.0)))
 
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 234.5 95.0)))
+    (PROGN (SLEEP 0.9) (STOUCH (LIST 234.5 95.0)))
     (progn (sleep 2.4) (bottom))
     (PROGN (SLEEP 0.7) (STOUCH (LIST 237.0 279.5)))
     (PROGN (SLEEP 0.5) (STOUCH (LIST 35.0 212.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 33.5 173.5)))
+    (PROGN (SLEEP 0.9) (STOUCH (LIST 33.5 173.5)))
 
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 248.5 119.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 52.5 68.5)))
+    (PROGN (SLEEP 0.9) (STOUCH (LIST 248.5 119.0)))
+    (PROGN (SLEEP 0.9) (STOUCH (LIST 52.5 68.5)))
     (PROGN (SLEEP 0.7) (up-1))
     (PROGN (SLEEP 0) (bottom))))
 
@@ -176,17 +176,16 @@
     (progn (sleep 2) (m *pay-confirm*))
     (progn (sleep 2.4) (m *crack-pin-sh*))
     (progn (sleep 2) (m *pin-sh*))
-    (progn (sleep 4) (m *fill-sh*))
+    (progn (sleep 4.5) (m *fill-sh*))
     (progn (sleep 3) (m *paymethode*))
     (progn (sleep 0) (m *select-order*))))
 
-(DEFPARAMETER *ZURUCK*
-  '((PROGN (SLEEP 2.489) (STOUCH (LIST 239.5 330.0)))
-    (PROGN (SLEEP 2.571) (STOUCH (LIST 33.0 341.5)))
-    (PROGN (SLEEP 4.77) (STOUCH (LIST 237.0 540.0)))
-    (PROGN (SLEEP 2) (STOUCH (LIST 54.0 393.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 153.5 96.0)))
-    (progn (sleep 0) (bottom))    )) 
+(DEFPARAMETER *zu
+  '((progn (sleep 0) (stouch (list 25.0 41.0))))) 
+
+
+(DEFPARAMETER *BE*
+  '((progn (sleep 0) (stouch (list 295.0 39.0))))) 
 
 (DEFPARAMETER *FOO*
   '((PROGN (SLEEP 5.152) (STOUCH (LIST 163.5 315.5)))

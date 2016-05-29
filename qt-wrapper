@@ -12,6 +12,7 @@
 s-6 ; (11st)
 s-9 ; (m *venga*)
 s-- ; (m *zuruck*)
+s-+ ; (shot-sym-down)
 
 s-7 ; (m *select-order*) aus Emacs macro
 s-8 ; (m *paymethode*) aus Emacs macro
