@@ -25,7 +25,8 @@
 	 (finish-output *ssh-in*)))
  
 (defun swipe (lst)
-  (let* ((x1 (nth 0 lst))
+  (let* (
+	 (x1 (nth 0 lst))
 	(y1 (nth 1 lst))
 	(x2 (nth 2 lst))
 	(y2 (nth 3 lst))
@@ -34,7 +35,8 @@
     (cmd cmd)))
 
 (defun touch (lst)
-  (let* ((x (car lst))
+  (let* (
+	 (x (car lst))
 	(y (cadr lst))
 	(cmd (format nil "stouch touch ~S ~S" x y)))
     (cmd cmd)
@@ -64,10 +66,10 @@
 
 
 (DEFPARAMETER *FOTOS-LOSCH*
-  '((PROGN (SLEEP 0.8) (STOUCH (LIST 160.5 484.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 295.0 545.0)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 280.5 89.5)))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 263.5 43.0)))
+  '((PROGN (SLEEP 1) (STOUCH (LIST 160.5 484.0)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 295.0 545.0)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 280.5 89.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 263.5 43.0)))
     (progn (sleep 1.6) (stouch (list 85.5 540.5)))
     (progn (sleep 0) (fotos))))
 
@@ -174,7 +176,8 @@
 
 (defparameter *ratio* 0.5)
 (defparameter *scr-size-ori* (/ 1136 2))
-(defparameter *scr-size-jetzt* 1136.0)
+;;; TODO
+(defparameter *scr-size-jetzt* (/ 1136.0 2))
  
 (defun calc-ratio ()
      (setf *ratio* (/ *scr-size-ori* *scr-size-jetzt*)))
@@ -243,9 +246,10 @@
 ;	(delete-region)
 	(end-of-buffer)))))
 
+;;; TODO ratio control m/ wire wireless qt reflector
 (defun halbe (etwas-lst)
-  "alle ele in list mit ratio, eigentlich nicht half machen, deswegen halbe"
-  (mapcar (lambda (x) (* x *ratio*)) etwas-lst))
+  "alle ele in list mit ratio, eigentlich nicht half machen, deswegen halbe. im bezueglich mit qt-wrapper nur."
+  (mapcar (lambda (x) (* x *ratio* 0.5)) etwas-lst))
 
 
 (defun poen-conv (lst)
@@ -317,7 +321,9 @@
 	    (swank:eval-in-emacs 
 	     `(message "DRAG-passiert: %s " ,msg))
 	    (swank:eval-in-emacs
-	     `(osx-lib-copy-to-clipboard ,res-string)))))
+	     `(osx-lib-copy-to-clipboard ,res-string))
+	      ;; (sleep 2) (shot-sym-down)
+	    )))
 
 ;;; TODO #'insert-log-emacs ein/aus
 ;;; falls nur record status, log ein
@@ -340,7 +346,9 @@
 	   (swank:eval-in-emacs
 	    `(message "CLICK-passiert: %s" ,msg ))
 	   (swank:eval-in-emacs
-	    `(osx-lib-copy-to-clipboard ,res-string)))))
+	    `(osx-lib-copy-to-clipboard ,res-string))
+	   ;; (sleep 1) (shot-sym-down)
+	   )))
 
 
 ;; *record-kiste* zu *fun-kiste* conversion

@@ -239,7 +239,7 @@
 ;; TODO kali  m/ lezte row
 ;; ^ shift, ! bs $ num @ kbd #\spaceko spc / ok
 ;; TODO shift not included
-(defparameter *enkey-seq* "qwertyuiopasdfghjklzxcvbnm!$@    /")
+(defparameter *enkey-seq* "qwertyuiopasdfghjklzxcvbnm!$@    ./")
 
 (defun wozu-nth-btn-enkey (x)
   "nth btn => position (x y)"
