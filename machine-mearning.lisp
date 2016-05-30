@@ -147,7 +147,6 @@
 	     (window-pixel-left *win*)))))
 
 (defparameter *qt-wrapper-left* 0)
-
 (defun init ()
   (setq *qt-wrapper-left* (swank:eval-in-emacs '(setup-wins)))
   (format t "*QT-WRAPPER-LEFT*: ~d, DEM NACHST, KALIBRATION M/ QUICKTIME PLAYER" *qt-wrapper-left*)
@@ -499,17 +498,27 @@
 ;;
 
 (defparameter *airplay0*
-  '((progn (sleep 0.9) (ctl))
+  '((progn (sleep 1.2) (ctl))
     (progn (sleep 0.9) (m *be*))
     (progn (sleep 0.9) (stouch (list 173.0 100.0)))
-    (progn (sleep 0.9) (stouch (list 212.0 447.0)))
+    (progn (sleep 1.2) (stouch (list 212.0 447.0)))
     (progn (sleep 0) (ctl))
 ))
 
 (defparameter *airplay1*
-  '((progn (sleep 0.9) (ctl))
+  '((progn (sleep 1.2) (ctl))
     (progn (sleep 0.9) (m *be*))
     (progn (sleep 0.9) (stouch (list 165.0 163.0)))
-    (progn (sleep 0.9) (stouch (list 239.0 450.0)))
+    (progn (sleep 1.2) (stouch (list 239.0 450.0)))
     (progn (sleep 0) (ctl))
 ))
+
+;;; TODO #'airplay toggle od. x
+;; (defun airplay (x))
+
+
+(defun vol- ()
+  (cmd "activator send libactivator.audio.decrease-volume"))
+
+(defun vol+ ()
+  (cmd "activator send libactivator.audio.increase-volume"))
