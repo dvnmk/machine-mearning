@@ -71,7 +71,8 @@
     (PROGN (SLEEP 1) (STOUCH (LIST 280.5 89.5)))
     (PROGN (SLEEP 1) (STOUCH (LIST 263.5 43.0)))
     (progn (sleep 1.6) (stouch (list 85.5 540.5)))
-    (progn (sleep 0) (fotos))))
+    (progn (sleep 0) (fotos))
+    (progn (sleep 0) (format t "*garbage-colletor*..."))))
 
 (defun g-c ()
   (m *garbage-collector*))
@@ -224,6 +225,12 @@
 
 (defun licht+ ()
   (cmd "activator send libactivator.screen.brightness.increase"))
+
+(defun licht0 ()
+  (dotimes (i 8) (licht-)))
+
+(defun licht1 ()
+  (dotimes (i 8) (licht+)))
 
 (defun insert-log-emacs (msg color)
   "Insert x color msg at the end of buffer in the buffer qt-wrapper"
@@ -491,3 +498,18 @@
   (cmd "activator send com.shinhan.sbank"))
 ;;
 
+(defparameter *airplay0*
+  '((progn (sleep 0.9) (ctl))
+    (progn (sleep 0.9) (m *be*))
+    (progn (sleep 0.9) (stouch (list 173.0 100.0)))
+    (progn (sleep 0.9) (stouch (list 212.0 447.0)))
+    (progn (sleep 0) (ctl))
+))
+
+(defparameter *airplay1*
+  '((progn (sleep 0.9) (ctl))
+    (progn (sleep 0.9) (m *be*))
+    (progn (sleep 0.9) (stouch (list 165.0 163.0)))
+    (progn (sleep 0.9) (stouch (list 239.0 450.0)))
+    (progn (sleep 0) (ctl))
+))
