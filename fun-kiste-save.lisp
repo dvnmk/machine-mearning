@@ -33,22 +33,22 @@
     (PROGN (SLEEP 1) (STOUCH (LIST 162.0 469.5)))
     (PROGN (SLEEP 1) (STOUCH (LIST 26.5 411.5)))
     (PROGN (SLEEP 1.4) (STOUCH (LIST 157.5 396.0)))
-    (PROGN (SLEEP 2.4) (STOUCH (LIST 241.0 131.0)))
+    (PROGN (SLEEP 2.6) (STOUCH (LIST 241.0 131.0)))
 
-    (PROGN (SLEEP 0.9) (STOUCH (LIST 234.5 95.0)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 234.5 95.0)))
     (progn (sleep 2.4) (bottom))
     (PROGN (SLEEP 0.7) (STOUCH (LIST 237.0 279.5)))
     (PROGN (SLEEP 0.5) (STOUCH (LIST 35.0 212.0)))
-    (PROGN (SLEEP 0.9) (STOUCH (LIST 33.5 173.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 33.5 173.5)))
 
-    (PROGN (SLEEP 0.9) (STOUCH (LIST 248.5 119.0)))
-    (PROGN (SLEEP 0.9) (STOUCH (LIST 52.5 68.5)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 248.5 119.0)))
+    (PROGN (SLEEP 1) (STOUCH (LIST 52.5 68.5)))
     (PROGN (SLEEP 0.7) (up-1))
     (PROGN (SLEEP 0) (bottom))))
 
 ;; TODO roller-selector fun?
 (defparameter *bank-select-sh*
-  '((progn (sleep 0.4) (stouch (list 281.0 402.0)))
+  '((progn (sleep 0.8) (stouch (list 281.0 402.0)))
     (progn (sleep 0.4) (stouch (list 161.0 532.5)))
     (progn (sleep 1.4) (stouch (list 161.0 554.5)))
     (progn (sleep 0.6) (stouch (list  164.5 445.5 159.0 548.5  0.2)))
@@ -56,11 +56,10 @@
     (progn (sleep 0) (stouch (list 200.5 193.5)))))
 
 (defparameter *bank-select-ha*
-  '((progn (sleep 0.4) (stouch (list 282.0 400.5)))
-    (progn (sleep 0.4) (stouch (list 158.5 484.5)))
-    (progn (sleep 1.4) (stouch (list 158.5 484.5)))
-    (progn (sleep 0.6) (stouch (list  164.5 548.5 159.0 445.5 0.2)))
-    (progn (sleep 0.6) (stouch (list  164.5 548.5 159.0 445.5 0.2)))
+  '((progn (sleep 1.2) (stouch (list 282.0 400.5)))
+    (progn (sleep 1) (stouch (list 164.0 460.0)))
+    (progn (sleep 0.6) (stouch (list  164.5 548.5  159.0 445.5  0.2)))
+    (progn (sleep 0.6) (stouch (list  164.5 548.5  159.0 445.5  0.2)))
     (progn (sleep 0) (stouch (list 200.5 193.5)))))
 
 (DEFPARAMETER *konto-nu-SH*
@@ -71,8 +70,8 @@
 
 (DEFPARAMETER *konto-nu-ha*
   '((progn (sleep 1) (type-string-secupad (concatenate 'string *my-ha* "/")) )
-    (progn (sleep 1.6) (crack-secupad))
-    (PROGN (SLEEP 0.8) (STOUCH (LIST 165.0 133.0)))
+    (progn (sleep 3) (crack-secupad))
+    (PROGN (SLEEP 1.4) (STOUCH (LIST 165.0 133.0)))
     (progn (sleep 0) (bottom))
     ))
 
@@ -97,7 +96,7 @@
   '((progn (sleep 0.6) (type-string-secupad (concatenate 'string (cadr *my-min*) "/")))
     (progn (sleep 2.2) (crack-secupad))
     (progn (sleep 0.6) (type-string-secupad (concatenate 'string (car *my-min*) "/")))
-    (progn (sleep 1.2) (crack-secupad))
+    (progn (sleep 1.6) (crack-secupad))
     (PROGN (SLEEP 0.2) (STOUCH (LIST 152.5 303.5))))) 
 
 (defparameter *fill-sh*
@@ -107,6 +106,14 @@
     (progn (sleep 4) (m *konto-pin*))
     (progn (sleep 3.4) (m *konto-nu-sh*))
     (progn (sleep 0) (m *bank-select-sh*))))
+
+(defparameter *fill-ha*
+  '((progn (sleep 2) (stouch (list 157.5 429.5)))
+    (progn (sleep 1.8) (m *min-num*))
+    (progn (sleep 2) (m *konto-haber*))
+    (progn (sleep 4) (m *konto-pin*))
+    (progn (sleep 3.4) (m *konto-nu-ha*))
+    (progn (sleep 0) (m *bank-select-ha*))))
 
 (defparameter *select-secucard*
   '((progn (sleep 0.8) (stouch (list 220.5 163.0)))
@@ -141,6 +148,17 @@
     (PROGN (SLEEP 0.8) (STOUCH (LIST 150.5 310.5)))
     (progn (sleep 0) (crack-pin *sh*))))
 
+(DEFPARAMETER *crack-pin-ha*
+  '(
+    (progn (sleep 1) (stouch (list 165.5 127.5)))
+    (progn (sleep 1) (stouch (list 163.0 135.5)))
+    (progn (sleep 1) (stouch (list 94.5 318.5)))
+    (progn (sleep 0.5) (type-string-numpad (cadr *gefunden-pin*)))
+    (progn (sleep 0.5) (stouch (list 216.0 283.5)))
+    (progn (sleep 0.5) (type-string-numpad (car *gefunden-pin*)))
+    (PROGN (SLEEP 0.8) (STOUCH (LIST 150.5 310.5)))
+    (progn (sleep 0) (crack-pin *ha*))))
+
 
 
 (DEFPARAMETER *pay-confirm*
@@ -149,7 +167,7 @@
     (progn (sleep 0) (type-string-bankpay (concatenate 'string
 						       *confirm-code*
 						       "/")))
-    (progn (sleep 1.2) (crack-bankpay))
+    (progn (sleep 1.6) (crack-bankpay))
     (progn (sleep 0) (stouch (list  161.5 128.5)))
     ))
  
@@ -177,6 +195,16 @@
     (progn (sleep 2.4) (m *crack-pin-sh*))
     (progn (sleep 2) (m *pin-sh*))
     (progn (sleep 4.5) (m *fill-sh*))
+    (progn (sleep 3) (m *paymethode*))
+    (progn (sleep 0) (m *select-order*))))
+
+(defparameter *venga*
+  '((progn (sleep 2) (shot-sym-down))
+    (progn (sleep 22) (m *abbrechen*))
+    (progn (sleep 2) (m *pay-confirm*))
+    (progn (sleep 2.4) (m *crack-pin-ha*))
+    (progn (sleep 2) (m *pin-ha*))
+    (progn (sleep 4.5) (m *fill-ha*))
     (progn (sleep 3) (m *paymethode*))
     (progn (sleep 0) (m *select-order*))))
 

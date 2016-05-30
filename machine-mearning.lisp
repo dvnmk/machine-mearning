@@ -3,16 +3,16 @@
 ;;; "machine-mearning" goes here. Hacks and glory await!
 
 (defparameter *ssh* nil)
-(defparameter *ssh-in* nil)
+(defparameter *ssh-in* NIL)
 
 (defun connect ()
   (progn
     (defparameter *ssh* (external-program:start "ssh"
 						'("-t" "-t" "mobile@192.168.0.3"
-						  ;"-p" "2000"
+						  ;;"-p" "2000"
 						  )
 					:output t :input :stream 
-								 ;; :wait nil
+					;; :wait nil
 					;; :sharing :external
 							  ))
     (defparameter *ssh-in* (external-program:process-input-stream *ssh*))))
@@ -23,7 +23,7 @@
 (defun cmd (cmd)
   (progn (format *ssh-in* "~D~%" cmd)
 	 (finish-output *ssh-in*)))
- 
+
 (defun swipe (lst)
   (let* (
 	 (x1 (nth 0 lst))
@@ -64,15 +64,15 @@
   "Open the Foto app"
   (cmd "activator send com.apple.mobileslideshow"))
 
-
+;;; TODO (progn (sleep 0)(fotos) '(fotos) zu macro?
 (DEFPARAMETER *garbage-collector*
   '((PROGN (SLEEP 1) (STOUCH (LIST 160.5 484.0)))
     (PROGN (SLEEP 1) (STOUCH (LIST 295.0 545.0)))
     (PROGN (SLEEP 1) (STOUCH (LIST 280.5 89.5)))
     (PROGN (SLEEP 1) (STOUCH (LIST 263.5 43.0)))
     (progn (sleep 1.6) (stouch (list 85.5 540.5)))
-    (progn (sleep 0) (fotos))
-    (progn (sleep 0) (format t "*garbage-colletor*..."))))
+    (progn (sleep 0) (fotos) '(fotos))
+    (progn (sleep 0) (format t "*garbage-collector*..."))))
 
 (defun g-c ()
   (m *garbage-collector*))
